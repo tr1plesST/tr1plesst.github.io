@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>tripleS Objekt Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f6fa;--sf:#fff;--sf2:#f0f1f7;--bd:#e2e4ee;--tx:#1a1a2e;--txd:#6b7194;--ac:#6c5ce7;--ac2:#00b894;--ac3:#fd79a8;--sh:0 2px 12px rgba(108,92,231,0.08);--r:14px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Pretendard',system-ui,sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;}
+.ctn{max-width:960px;margin:0 auto;padding:10px;}
+.hd{text-align:center;padding:20px 12px 16px;}
+.hd h1{font-size:1.4rem;font-weight:900;background:linear-gradient(135deg,#6c5ce7,#00b894);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hd p{color:var(--txd);font-size:.78rem;margin-top:3px;}
+.tabs{display:flex;gap:4px;margin-bottom:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tb{flex-shrink:0;padding:9px 14px;border:none;background:var(--sf);color:var(--txd);font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer;border-radius:10px;transition:all .2s;box-shadow:var(--sh);white-space:nowrap;}
+.tb:hover{color:var(--ac)}.tb.on{background:var(--ac);color:#fff;box-shadow:0 4px 16px rgba(108,92,231,.3);}
+.pn{display:none;animation:fi .25s ease}.pn.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.cd{background:var(--sf);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--sh);}
+.ct{font-size:.92rem;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.mc{margin-bottom:8px;display:flex;gap:5px;flex-wrap:wrap;}
+.cb{padding:5px 11px;border-radius:8px;border:1.5px solid var(--bd);background:var(--sf);color:var(--txd);font-family:inherit;font-size:.7rem;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.cb:hover,.cb.on{background:var(--ac);color:#fff;border-color:var(--ac);}
+.mg{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px;}
+.mb{padding:4px 9px;border-radius:14px;border:2px solid;font-family:inherit;font-size:.68rem;font-weight:700;cursor:pointer;transition:all .12s;background:transparent;}
+.mb:active{transform:scale(.95)}.mb .sn{font-family:'JetBrains Mono';font-size:.58rem;opacity:.55;margin-right:1px;}
+.mr{display:flex;gap:3px;margin-bottom:10px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none;}.mr::-webkit-scrollbar{display:none;}
+.md{flex-shrink:0;padding:6px 12px;border-radius:9px;border:1.5px solid var(--bd);background:var(--sf);color:var(--txd);font-family:inherit;font-size:.72rem;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.md:hover{border-color:var(--ac);color:var(--ac)}.md.on{background:var(--ac);color:#fff;border-color:var(--ac);}
+.cx{position:relative;width:100%;height:400px;}.cx.tl{height:520px;}
+@media(max-width:600px){.cx{height:340px}.cx.tl{height:460px}}
+canvas{width:100%!important;}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px;border:1px solid var(--bd);}
+table{border-collapse:collapse;width:100%;min-width:1400px;font-size:.7rem;}
+thead th{background:var(--sf2);color:var(--txd);padding:9px 5px;text-align:center;font-weight:700;white-space:nowrap;border-bottom:2px solid var(--bd);cursor:pointer;user-select:none;position:sticky;top:0;z-index:2;transition:background .15s;}
+thead th:hover{background:var(--ac);color:#fff;}
+thead th.sa::after{content:' ▲';font-size:.55rem}thead th.sd::after{content:' ▼';font-size:.55rem}
+tbody td{padding:6px 4px;text-align:right;border-bottom:1px solid var(--bd);font-family:'JetBrains Mono';font-size:.67rem;}
+tbody td:first-child{text-align:center;font-weight:700;position:sticky;left:0;background:var(--sf);z-index:1;font-family:'Pretendard';font-size:.7rem;}
+tbody tr:hover td{background:#f0f0ff}tbody tr:hover td:first-child{background:#e8e8f8}
+.r1{color:#e17055;font-weight:800}.r2{color:#636e72;font-weight:700}.r3{color:#b8860b;font-weight:700}
+td.tc{color:var(--ac);font-weight:700}td.rc{color:var(--ac2);font-weight:700}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;}
+.sc{background:var(--sf2);border-radius:10px;padding:12px;text-align:center;}
+.sc .lb{font-size:.67rem;color:var(--txd);margin-bottom:3px;font-weight:600;}
+.sc .vl{font-size:1.3rem;font-weight:900;font-family:'JetBrains Mono';}
+.sc .sb{font-size:.62rem;color:var(--txd);margin-top:2px;}
+/* Heatmap table */
+.hm-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px;}
+.hm{border-collapse:collapse;font-size:.62rem;min-width:900px;width:100%;}
+.hm th{padding:5px 3px;background:var(--sf2);color:var(--txd);font-weight:600;text-align:center;white-space:nowrap;border:1px solid var(--bd);position:sticky;top:0;z-index:2;}
+.hm td{padding:4px 2px;text-align:center;font-weight:700;font-family:'JetBrains Mono';font-size:.62rem;border:1px solid rgba(0,0,0,.06);min-width:38px;}
+.hm td:first-child{text-align:left;font-family:'Pretendard';font-weight:700;position:sticky;left:0;z-index:1;background:var(--sf);padding-left:6px;min-width:70px;white-space:nowrap;}
+.hm .hm-rank{display:inline-block;width:22px;height:22px;line-height:22px;border-radius:6px;font-size:.6rem;}
+@media(max-width:600px){.ctn{padding:6px}.hd h1{font-size:1.15rem}.sg{grid-template-columns:repeat(2,1fr)}.sc .vl{font-size:1rem}}
+</style>
+</head>
+<body>
+<div class="ctn">
+<div class="hd"><h1>tripleS Objekt Dashboard</h1><p>S1~S24 · 18 Seasons · 종합 분석</p></div>
+<div class="tabs" id="mainTabs">
+<button class="tb on" data-t="table">📊 판매표</button>
+<button class="tb" data-t="charts">📈 그래프</button>
+<button class="tb" data-t="analytics">🔬 통계</button>
+<button class="tb" data-t="ranking">🏅 순위</button>
+</div>
+<div class="pn on" id="p-table"><div class="cd"><div class="ct">📊 판매량 표</div><div class="mc"><button class="cb on" onclick="stm('s',this)">판매량</button><button class="cb" onclick="stm('r',this)">등수</button></div><div class="tw" id="tw"></div></div></div>
+<div class="pn" id="p-charts"><div class="cd"><div class="ct">📈 그래프</div><div class="mr" id="cmr"></div><div class="mc" id="mcc"></div><div class="mg" id="mgr"></div><div class="cx" id="mcx"><canvas id="mc"></canvas></div></div></div>
+<div class="pn" id="p-analytics">
+<div class="cd"><div class="ct">🔬 핵심 지표</div><div class="sg" id="ssg"></div></div>
+<div class="cd"><div class="ct">📐 로렌츠 곡선</div><div class="cx"><canvas id="lzc"></canvas></div><div id="lzm" style="margin-top:8px"></div></div>
+<div class="cd"><div class="ct">📊 지니계수 추이</div><div class="cx"><canvas id="gic"></canvas></div></div>
+<div class="cd"><div class="ct">📊 변동계수 (CV) 추이</div><div class="cx"><canvas id="cvc"></canvas></div></div>
+<div class="cd"><div class="ct">📊 상위집중도 추이</div><div class="mc" id="concBtns"></div><div class="cx"><canvas id="cnc"></canvas></div></div>
+<div class="cd"><div class="ct">🗺️ 등수 히트맵</div><div class="hm-wrap" id="hmw"></div></div>
+<div class="cd"><div class="ct">📊 등수 분포 (박스플롯)</div><div class="cx tl"><canvas id="bxc"></canvas></div></div>
+<div class="cd"><div class="ct">🔵 평균 판매량 vs 안정성 (산점도)</div><div class="cx"><canvas id="sc1"></canvas></div></div>
+<div class="cd"><div class="ct">🔵 성장 추세 vs 평균 등수 (산점도)</div><div class="cx"><canvas id="sc2"></canvas></div></div>
+<div class="cd"><div class="ct">🔵 초기 판매량 vs 최근 판매량 (산점도)</div><div class="cx"><canvas id="sc3"></canvas></div></div>
+</div>
+<div class="pn" id="p-ranking">
+<div class="cd"><div class="ct">🏅 총 판매량</div><div class="cx tl"><canvas id="tbc"></canvas></div></div>
+<div class="cd"><div class="ct">📊 평균 등수</div><div class="cx tl"><canvas id="arc"></canvas></div></div>
+</div>
+</div>
+<script>
+const M=[
+{id:'S1',n:'서연',e:'SeoYeon',c:'#22AEFF'},{id:'S2',n:'혜린',e:'HyeRin',c:'#9200FF'},
+{id:'S3',n:'지우',e:'JiWoo',c:'#EED500'},{id:'S4',n:'채연',e:'ChaeYeon',c:'#7ACC15'},
+{id:'S5',n:'유연',e:'YooYeon',c:'#DB0C74'},{id:'S6',n:'수민',e:'SooMin',c:'#FC83A4'},
+{id:'S7',n:'나경',e:'NaKyoung',c:'#4E8A92'},{id:'S8',n:'유빈',e:'YuBin',c:'#E8A0A0'},
+{id:'S9',n:'카에데',e:'Kaede',c:'#E8B420'},{id:'S10',n:'다현',e:'DaHyun',c:'#F080C0'},
+{id:'S11',n:'코토네',e:'Kotone',c:'#E8C800'},{id:'S12',n:'연지',e:'YeonJi',c:'#5974FF'},
+{id:'S13',n:'니엔',e:'Nien',c:'#FF953F'},{id:'S14',n:'소현',e:'SoHyun',c:'#2040D0'},
+{id:'S15',n:'신위',e:'Xinyu',c:'#D51313'},{id:'S16',n:'마유',e:'Mayu',c:'#FE8E76'},
+{id:'S17',n:'린',e:'Lynn',c:'#AC62B7'},{id:'S18',n:'주빈',e:'JooBin',c:'#80C830'},
+{id:'S19',n:'하연',e:'HaYeon',c:'#30C8A0'},{id:'S20',n:'시온',e:'ShiOn',c:'#FF428A'},
+{id:'S21',n:'채원',e:'ChaeWon',c:'#B088D0'},{id:'S22',n:'설린',e:'Sullin',c:'#5EA870'},
+{id:'S23',n:'서아',e:'SeoAh',c:'#80C8E0'},{id:'S24',n:'지연',e:'JiYeon',c:'#F09848'},
+];
+const SN=['D1·1','D1·2','D1·3','24S','E1·1','E1·2','E1·3','24X','25🌸','A2·1','A2·2','A2·3','25S','25SN','B2·1','B2·2','25X','26V'];
+const SL=['디바인01 1st','디바인01 2nd','디바인01 3rd','24 써머','에버01 1st','에버01 2nd','에버01 3rd','24크리스마스','25벚꽃','아톰02 1st','아톰02 2nd','아톰02 3rd','25 써머','25 써머나잇','바이너리02 1st','바이너리02 2nd','25크리스마스','26발렌타인'];
+const D=[
+[9493,16472,14092,6248,16582,15497,12745,7566,4499,20436,14471,15488,6262,4607,14138,10390,4003,3629],
+[3069,4791,4451,1640,5120,4019,5466,2241,1055,4762,6006,4197,1901,1632,4045,4750,1249,1302],
+[4005,6335,7128,2753,7530,6716,6354,2833,1957,6465,7262,6845,3281,2878,6324,6468,2529,2229],
+[2960,5124,4774,1927,5483,5250,5203,2078,1616,4788,4782,5133,2150,1535,5001,4341,2278,2067],
+[9350,18241,12356,7882,16288,14761,13125,6921,4209,12692,12111,15803,6179,4687,12436,10082,4708,3567],
+[3626,6440,5480,2444,9045,6325,6246,2671,1738,4322,6462,4273,2043,1538,3580,3622,1772,1894],
+[4631,11510,10421,5368,13402,12054,10068,6019,3722,10699,10436,10440,5141,3454,9441,8144,4181,3725],
+[3796,5933,5043,2771,7324,7343,7803,3855,2069,5730,8961,7685,3656,2883,7448,7507,3038,2661],
+[3639,4592,4638,2340,5760,5393,7419,2528,2081,4914,4830,5059,2648,1660,4162,5718,2332,2246],
+[3379,4659,4038,2015,5616,5443,6482,2477,1610,4882,4659,5290,2143,1533,4239,4536,1560,1654],
+[4789,7911,6731,3331,7920,9230,8942,4068,2774,6867,6964,9449,3816,2936,7910,7953,3839,2981],
+[2854,5240,5396,2656,6731,6225,6690,2966,1700,5444,6767,6649,2663,1880,4168,6135,3470,2793],
+[3948,5793,5420,3073,5779,7029,6916,2987,2469,7419,6346,7069,4217,2525,7476,5847,2870,2293],
+[5476,9425,7283,5304,9134,10291,9362,4335,2904,6588,6719,8835,3675,2655,6359,5889,3184,2402],
+[5033,7876,6184,4951,7343,8571,7590,4172,2581,6513,6414,6949,3559,2296,4235,3863,2139,1738],
+[3237,3738,4717,2294,5295,5816,6156,2606,1784,4839,5261,4474,1772,1576,3670,3527,1876,1772],
+[3521,5025,3302,2433,4741,5385,5920,2446,1772,3685,5201,4831,2576,1382,4324,4799,2581,2345],
+[2748,3854,3873,1753,4818,5564,5342,1854,1002,4108,3607,3716,2272,1258,4268,4043,1694,2068],
+[3239,6714,5363,3020,6121,9678,8582,3190,2535,7254,7509,9557,4220,2698,6249,7199,4211,3348],
+[2745,4975,3758,2761,5654,4918,5258,2488,1865,4375,3893,4961,2307,1851,4616,5261,2579,2386],
+[5013,9236,7749,5021,10384,8268,9555,4777,1951,4531,6751,7951,3437,2467,8800,7921,4847,3874],
+[4508,4136,3329,2589,4087,4750,5831,1712,1614,3440,3437,4394,2131,1152,3361,2811,1625,1441],
+[4902,5688,4389,2674,4767,5085,5482,2266,1589,3687,4607,4694,1703,1281,3401,3318,2049,1614],
+[7404,6305,5185,3628,7180,9273,9622,4217,3026,8314,6966,10648,4039,3098,7065,5685,4210,3582],
+];
+const TS=[196618,61696,89892,66490,185398,73521,142856,95506,71959,66215,108411,80427,89476,109820,92007,64410,66269,57842,100687,66651,112533,56348,63196,109447];
+const TR=[865119200,271462400,395524800,292556000,815751200,323492400,628566400,420226400,316619600,291346000,477008400,353878800,393694400,483208000,404830800,283404000,291583600,254504800,443022800,293264400,495145200,247931200,278062400,481566800];
+const NS=SN.length,NM=M.length;
+function mkR(){const R=M.map(()=>[]);for(let s=0;s<NS;s++){const a=M.map((_,i)=>({i,v:D[i][s]})).sort((a,b)=>b.v-a.v);a.forEach((x,r)=>R[x.i][s]=r+1);}return R;}
+const RK=mkR();
+const tsS=M.map((_,i)=>({i,t:TS[i]})).sort((a,b)=>b.t-a.t);
+const TRK=Array(NM);tsS.forEach((x,r)=>TRK[x.i]=r+1);
+const ARK=M.map((_,i)=>RK[i].reduce((a,b)=>a+b,0)/NS);
+const fmt=n=>n.toLocaleString('ko-KR');
+const fW=n=>n>=1e8?(n/1e8).toFixed(1)+'억':n>=1e4?(n/1e4).toFixed(0)+'만':fmt(n);
+const cc=h=>{const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return(r*.299+g*.587+b*.114)>160?'#1a1a2e':'#fff';};
+const rgba=(h,a)=>`rgba(${parseInt(h.slice(1,3),16)},${parseInt(h.slice(3,5),16)},${parseInt(h.slice(5,7),16)},${a})`;
+function gini(v){const s=[...v].sort((a,b)=>a-b),n=s.length,m=s.reduce((a,b)=>a+b,0)/n;let d=0;for(let i=0;i<n;i++)for(let j=0;j<n;j++)d+=Math.abs(s[i]-s[j]);return d/(2*n*n*m);}
+function cvF(v){const m=v.reduce((a,b)=>a+b,0)/v.length;return Math.sqrt(v.reduce((s,x)=>s+(x-m)**2,0)/v.length)/m;}
+
+// Tabs
+document.getElementById('mainTabs').onclick=e=>{const b=e.target.closest('.tb');if(!b)return;const t=b.dataset.t;document.querySelectorAll('.tb').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.pn').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.getElementById('p-'+t).classList.add('on');setTimeout(()=>Object.values(CH).forEach(c=>c?.resize?.()),100);};
+
+// Table
+let tS=-1,tD=1,tM='s';
+function stm(m,el){tM=m;el.parentElement.querySelectorAll('.cb').forEach(b=>b.classList.remove('on'));el.classList.add('on');rT();}
+function srt(c){if(tS===c)tD*=-1;else{tS=c;tD=1;}rT();}
+function rT(){
+const o=M.map((_,i)=>i);if(tS>=0)o.sort((a,b)=>{let va,vb;if(tS<NS){va=D[a][tS];vb=D[b][tS];}else if(tS===NS){va=TS[a];vb=TS[b];}else{va=TR[a];vb=TR[b];}return(vb-va)*tD;});
+let h='<table><thead><tr><th onclick="srt(-1)">멤버</th>';
+SL.forEach((s,i)=>{const cl=i===tS?(tD===1?'sd':'sa'):'';h+=`<th class="${cl}" onclick="srt(${i})">${s}</th>`;});
+h+=`<th class="${tS===NS?(tD===1?'sd':'sa'):''}" onclick="srt(${NS})">총판매</th><th class="${tS===NS+1?(tD===1?'sd':'sa'):''}" onclick="srt(${NS+1})">총매출</th></tr></thead><tbody>`;
+o.forEach(i=>{const m=M[i];h+=`<tr><td style="color:${m.c};border-left:3px solid ${m.c}">${m.id} ${m.n}</td>`;
+for(let s=0;s<NS;s++){if(tM==='r'){const r=RK[i][s];h+=`<td class="${r<=3?'r'+r:''}" style="text-align:center">${r}</td>`;}else h+=`<td>${fmt(D[i][s])}</td>`;}
+h+=`<td class="tc">${fmt(TS[i])}</td><td class="rc">${fW(TR[i])}</td></tr>`;});
+h+='</tbody></table>';document.getElementById('tw').innerHTML=h;}
+
+// Chart system
+const CH={};let sel=new Set(M.map((_,i)=>i)),cMode='sales';
+const MODES=[
+{k:'sales',l:'판매량'},{k:'rank',l:'등수'},{k:'indexed',l:'지수화(100)'},{k:'zScore',l:'Z-Score'},
+{k:'momentum',l:'모멘텀(3기)'},{k:'share',l:'점유율%'},{k:'deviation',l:'평균편차%'},{k:'cumulative',l:'누적'},
+{k:'rankChange',l:'등수변동'},{k:'volatility',l:'변동성(롤링CV)'}
+];
+function initMR(){const r=document.getElementById('cmr');r.innerHTML='';MODES.forEach(m=>{const b=document.createElement('button');b.className='md'+(m.k===cMode?' on':'');b.textContent=m.l;b.dataset.m=m.k;b.onclick=()=>{cMode=m.k;r.querySelectorAll('.md').forEach(x=>x.classList.remove('on'));b.classList.add('on');uMC();};r.appendChild(b);});}
+function initMC(){
+const c=document.getElementById('mcc');c.innerHTML='';
+[['전체',()=>selA()],['해제',()=>selN()],['TOP5',()=>selT(5)],['TOP10',()=>selT(10)],['BOT5',()=>selB(5)]].forEach(([l,f])=>{const b=document.createElement('button');b.className='cb';b.textContent=l;b.onclick=f;c.appendChild(b);});
+}
+function rMB(){const g=document.getElementById('mgr');g.innerHTML='';M.forEach((m,i)=>{const a=sel.has(i);const b=document.createElement('button');b.className='mb';b.style.borderColor=m.c;b.style.background=a?m.c:'transparent';b.style.color=a?cc(m.c):m.c;b.innerHTML=`<span class="sn">${m.id}</span>${m.n}`;b.onclick=()=>{sel.has(i)?sel.delete(i):sel.add(i);rMB();uMC();};g.appendChild(b);});}
+function selA(){M.forEach((_,i)=>sel.add(i));rMB();uMC();}
+function selN(){sel.clear();rMB();uMC();}
+function selT(n){sel.clear();tsS.slice(0,n).forEach(x=>sel.add(x.i));rMB();uMC();}
+function selB(n){sel.clear();tsS.slice(-n).forEach(x=>sel.add(x.i));rMB();uMC();}
+
+function gCD(mode,mi){
+switch(mode){
+case 'sales':return D[mi];
+case 'rank':return RK[mi];
+case 'indexed':{const b=D[mi][0]||1;return D[mi].map(v=>(v/b)*100);}
+case 'zScore':return D[mi].map((_,s)=>{const vs=M.map((_,j)=>D[j][s]),mn=vs.reduce((a,b)=>a+b,0)/NM,sd=Math.sqrt(vs.reduce((a,v)=>a+(v-mn)**2,0)/NM);return sd?(D[mi][s]-mn)/sd:0;});
+case 'momentum':{const r=[];for(let s=0;s<NS;s++){if(s<2){r.push(null);continue;}const a3=(D[mi][s]+D[mi][s-1]+D[mi][s-2])/3;const ap=s>=4?(D[mi][s-2]+D[mi][s-3]+D[mi][s-4])/3:D[mi][0];r.push(((a3-ap)/ap)*100);}return r;}
+case 'share':return D[mi].map((_,s)=>{const tot=M.reduce((a,_2,j)=>a+D[j][s],0);return(D[mi][s]/tot)*100;});
+case 'deviation':return D[mi].map((_,s)=>{const mn=M.reduce((a,_2,j)=>a+D[j][s],0)/NM;return((D[mi][s]-mn)/mn)*100;});
+case 'cumulative':{let c=0;return D[mi].map(v=>(c+=v));}
+case 'rankChange':return RK[mi].map((v,s)=>s===0?0:RK[mi][s-1]-v);
+case 'volatility':{const r=[];for(let s=0;s<NS;s++){if(s<2){r.push(null);continue;}const w=D[mi].slice(Math.max(0,s-2),s+1);const mn=w.reduce((a,b)=>a+b,0)/w.length;r.push(Math.sqrt(w.reduce((a,v)=>a+(v-mn)**2,0)/w.length)/mn*100);}return r;}
+}}
+
+function gYC(mode){
+const base={ticks:{color:'#6b7194',font:{size:10}},grid:{color:'rgba(108,92,231,0.06)'}};
+switch(mode){
+case 'rank':return{...base,reverse:true,min:1,max:24,title:{display:true,text:'등수',color:'#6b7194'}};
+case 'indexed':return{...base,title:{display:true,text:'지수 (1시즌=100)',color:'#6b7194'}};
+case 'zScore':return{...base,title:{display:true,text:'Z-Score (σ)',color:'#6b7194'}};
+case 'momentum':return{...base,title:{display:true,text:'모멘텀 %',color:'#6b7194'}};
+case 'share':return{...base,title:{display:true,text:'점유율 %',color:'#6b7194'}};
+case 'deviation':return{...base,title:{display:true,text:'평균대비 %',color:'#6b7194'}};
+case 'cumulative':return{...base,title:{display:true,text:'누적',color:'#6b7194'},ticks:{...base.ticks,callback:v=>fW(v)}};
+case 'rankChange':return{...base,title:{display:true,text:'등수변동 (양수=상승)',color:'#6b7194'}};
+case 'volatility':return{...base,title:{display:true,text:'롤링CV %',color:'#6b7194'}};
+default:return{...base,title:{display:true,text:'판매량',color:'#6b7194'},ticks:{...base.ticks,callback:v=>fW(v)}};
+}}
+
+function gTL(mode){
+return ctx=>{const v=ctx.raw;if(v===null)return'';
+switch(mode){
+case 'rank':return`${ctx.dataset.label}: ${v}위`;
+case 'indexed':return`${ctx.dataset.label}: ${v.toFixed(1)}`;
+case 'zScore':return`${ctx.dataset.label}: ${v>=0?'+':''}${v.toFixed(2)}σ`;
+case 'momentum':return`${ctx.dataset.label}: ${v>=0?'+':''}${v.toFixed(1)}%`;
+case 'share':return`${ctx.dataset.label}: ${v.toFixed(2)}%`;
+case 'deviation':return`${ctx.dataset.label}: ${v>=0?'+':''}${v.toFixed(1)}%`;
+case 'cumulative':return`${ctx.dataset.label}: ${fmt(Math.round(v))}`;
+case 'rankChange':return`${ctx.dataset.label}: ${v>0?'↑'+v:v<0?'↓'+Math.abs(v):'→'}`;
+case 'volatility':return`${ctx.dataset.label}: ${v.toFixed(1)}%`;
+default:return`${ctx.dataset.label}: ${fmt(v)}`;
+}};}
+
+function initMChart(){
+const ctx=document.getElementById('mc').getContext('2d');
+CH.main=new Chart(ctx,{type:'line',data:{labels:SN,datasets:[]},options:{
+responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(255,255,255,.95)',titleColor:'#1a1a2e',bodyColor:'#1a1a2e',borderColor:'#e2e4ee',borderWidth:1,padding:8,bodyFont:{size:11},callbacks:{label:gTL('sales')}}},
+scales:{x:{ticks:{color:'#6b7194',font:{size:8},maxRotation:50},grid:{color:'rgba(108,92,231,.05)'}},y:gYC('sales')}
+}});uMC();}
+
+function uMC(){
+const c=CH.main;if(!c)return;const ds=[];const n=sel.size;
+// Thinner lines for many members, highlight on hover via plugin
+const lw=n<=3?2.5:n<=6?1.8:n<=12?1.2:0.8;
+const pr=n<=3?4:n<=6?3:n<=12?1.5:0;
+
+// For Z-score, add zero line
+const needZero=cMode==='zScore'||cMode==='deviation'||cMode==='momentum'||cMode==='rankChange';
+
+M.forEach((m,i)=>{if(!sel.has(i))return;
+ds.push({label:`${m.id} ${m.n}`,data:gCD(cMode,i),borderColor:rgba(m.c,n<=12?.85:.55),backgroundColor:rgba(m.c,.03),
+borderWidth:lw,pointRadius:pr,pointBackgroundColor:m.c,pointHoverRadius:6,pointHoverBorderWidth:2,tension:.3,fill:false,spanGaps:true});});
+
+// Add baseline for Z-score/deviation/momentum/rankChange
+if(needZero){
+ds.unshift({label:'기준선 (0)',data:Array(NS).fill(0),borderColor:'rgba(107,113,148,0.5)',borderWidth:2,borderDash:[8,4],pointRadius:0,fill:false,order:999});
+}
+
+c.data.datasets=ds;c.options.scales.y=gYC(cMode);c.options.plugins.tooltip.callbacks.label=gTL(cMode);
+
+// Hover highlight plugin
+c.options.plugins.hoverHighlight=true;
+c.update();}
+
+// Hover highlight - make non-hovered lines dimmer
+const hoverPlugin={id:'hoverHL',beforeDraw(chart){
+if(!chart.options.plugins?.hoverHighlight)return;
+const active=chart.getActiveElements();
+if(active.length===0){chart.data.datasets.forEach(ds=>{if(ds.label!=='기준선 (0)')ds.borderWidth=ds._origBW||ds.borderWidth;});return;}
+const adi=active[0].datasetIndex;
+chart.data.datasets.forEach((ds,i)=>{
+if(!ds._origBW)ds._origBW=ds.borderWidth;
+if(ds.label==='기준선 (0)')return;
+if(i===adi){ds.borderWidth=3;ds.borderColor=ds.borderColor.replace(/[\d.]+\)$/,'1)');}
+else{ds.borderWidth=Math.max(0.5,ds._origBW*0.5);ds.borderColor=ds.borderColor.replace(/[\d.]+\)$/,'0.15)');}
+});
+}};
+Chart.register(hoverPlugin);
+
+// Analytics
+function rStats(){
+const gt=TS.reduce((a,b)=>a+b,0),gr=TR.reduce((a,b)=>a+b,0),mn=gt/NM;
+const sorted=[...TS].sort((a,b)=>a-b),med=(sorted[11]+sorted[12])/2;
+const std=Math.sqrt(TS.reduce((s,v)=>s+(v-mn)**2,0)/NM);
+const mx=tsS[0],mi=tsS[NM-1],g=gini(TS),c=cvF(TS);
+const items=[
+{l:'총 판매량',v:fmt(gt),s:fW(gr)+' 매출'},
+{l:'멤버 평균',v:fmt(Math.round(mn)),s:'중앙값 '+fmt(Math.round(med))},
+{l:'표준편차',v:fmt(Math.round(std)),s:(std/mn*100).toFixed(1)+'%'},
+{l:'1위',v:M[mx.i].n,s:fmt(mx.t)+'개',cl:M[mx.i].c},
+{l:'24위',v:M[mi.i].n,s:fmt(mi.t)+'개',cl:M[mi.i].c},
+{l:'Max/Min',v:(mx.t/mi.t).toFixed(2)+'x',s:'격차'},
+{l:'지니계수',v:g.toFixed(4),s:g<.15?'🟢매우균등':g<.25?'🟡균등':g<.35?'🟠약간불균':'🔴불균'},
+{l:'변동계수',v:(c*100).toFixed(1)+'%',s:'낮을수록 균등'},
+];
+document.getElementById('ssg').innerHTML=items.map(x=>`<div class="sc"><div class="lb">${x.l}</div><div class="vl" style="${x.cl?'color:'+x.cl:''}">${x.v}</div><div class="sb">${x.s}</div></div>`).join('');
+}
+
+function rLorenz(){
+const sorted=[...TS].sort((a,b)=>a-b),tot=sorted.reduce((a,b)=>a+b,0);
+const lx=[0],ly=[0];let cum=0;sorted.forEach((v,i)=>{cum+=v;lx.push((i+1)/NM);ly.push(cum/tot);});
+CH.lz=new Chart(document.getElementById('lzc').getContext('2d'),{type:'line',data:{labels:lx.map(v=>(v*100).toFixed(0)+'%'),datasets:[
+{label:'완전균등선',data:lx,borderColor:'rgba(107,113,148,.4)',borderWidth:1.5,borderDash:[6,4],pointRadius:0,fill:false},
+{label:'로렌츠 곡선',data:ly,borderColor:'#6c5ce7',borderWidth:3,backgroundColor:rgba('#6c5ce7',.1),pointRadius:3,pointBackgroundColor:'#6c5ce7',fill:true}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#6b7194',font:{size:10}}}},
+scales:{x:{ticks:{color:'#6b7194'},grid:{color:'rgba(0,0,0,.03)'},title:{display:true,text:'멤버 누적비율',color:'#6b7194'}},
+y:{ticks:{color:'#6b7194',callback:v=>(v*100)+'%'},grid:{color:'rgba(0,0,0,.03)'},title:{display:true,text:'판매량 누적비율',color:'#6b7194'}}}}});
+const t5=tsS.slice(0,5),b5=tsS.slice(-5);
+const t5p=(t5.reduce((a,x)=>a+TS[x.i],0)/tot*100).toFixed(1),b5p=(b5.reduce((a,x)=>a+TS[x.i],0)/tot*100).toFixed(1);
+document.getElementById('lzm').innerHTML=`<div class="sg"><div class="sc"><div class="lb">상위5인 점유율</div><div class="vl" style="color:#6c5ce7">${t5p}%</div><div class="sb">${t5.map(x=>M[x.i].n).join(', ')}</div></div><div class="sc"><div class="lb">하위5인 점유율</div><div class="vl" style="color:#e17055">${b5p}%</div><div class="sb">${b5.map(x=>M[x.i].n).join(', ')}</div></div></div>`;
+}
+
+function rGini(){
+const gs=SN.map((_,s)=>gini(M.map((_,i)=>D[i][s])));
+CH.gi=new Chart(document.getElementById('gic').getContext('2d'),{type:'line',data:{labels:SN,datasets:[{label:'지니계수',data:gs,borderColor:'#6c5ce7',backgroundColor:rgba('#6c5ce7',.08),borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#6c5ce7',fill:true,tension:.3}]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'지니: '+c.raw.toFixed(4)}}},
+scales:{x:{ticks:{color:'#6b7194',font:{size:8}},grid:{color:'rgba(0,0,0,.03)'}},y:{ticks:{color:'#6b7194'},grid:{color:'rgba(0,0,0,.03)'},title:{display:true,text:'지니계수',color:'#6b7194'}}}}});
+}
+
+function rCV(){
+const cs=SN.map((_,s)=>cvF(M.map((_,i)=>D[i][s]))*100);
+CH.cv=new Chart(document.getElementById('cvc').getContext('2d'),{type:'bar',data:{labels:SN,datasets:[{data:cs,backgroundColor:cs.map(v=>v>45?rgba('#e17055',.65):v>35?rgba('#fdcb6e',.75):rgba('#00b894',.65)),borderRadius:5}]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'CV: '+c.raw.toFixed(1)+'%'}}},
+scales:{x:{ticks:{color:'#6b7194',font:{size:8}},grid:{display:false}},y:{ticks:{color:'#6b7194',callback:v=>v+'%'},grid:{color:'rgba(0,0,0,.03)'}}}}});
+}
+
+// Concentration with 5/7/10 toggle
+let concN=5;
+function initConc(){
+const wrap=document.getElementById('concBtns');wrap.innerHTML='';
+[5,7,10].forEach(n=>{const b=document.createElement('button');b.className='cb'+(n===concN?' on':'');b.textContent='상위 '+n+'인';b.onclick=()=>{concN=n;wrap.querySelectorAll('.cb').forEach(x=>x.classList.remove('on'));b.classList.add('on');uConc();};wrap.appendChild(b);});
+}
+function rConc(){
+const data5=SN.map((_,s)=>{const vs=M.map((_,i)=>D[i][s]).sort((a,b)=>b-a);const t=vs.reduce((a,b)=>a+b,0);return(vs.slice(0,5).reduce((a,b)=>a+b,0)/t)*100;});
+const data7=SN.map((_,s)=>{const vs=M.map((_,i)=>D[i][s]).sort((a,b)=>b-a);const t=vs.reduce((a,b)=>a+b,0);return(vs.slice(0,7).reduce((a,b)=>a+b,0)/t)*100;});
+const data10=SN.map((_,s)=>{const vs=M.map((_,i)=>D[i][s]).sort((a,b)=>b-a);const t=vs.reduce((a,b)=>a+b,0);return(vs.slice(0,10).reduce((a,b)=>a+b,0)/t)*100;});
+CH.cn=new Chart(document.getElementById('cnc').getContext('2d'),{type:'line',data:{labels:SN,datasets:[
+{label:'상위5인',data:data5,borderColor:'#6c5ce7',backgroundColor:rgba('#6c5ce7',.08),borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#6c5ce7',fill:true,tension:.3},
+{label:'상위7인',data:data7,borderColor:'#00b894',backgroundColor:rgba('#00b894',.06),borderWidth:2,pointRadius:3,pointBackgroundColor:'#00b894',fill:true,tension:.3,hidden:true},
+{label:'상위10인',data:data10,borderColor:'#fd79a8',backgroundColor:rgba('#fd79a8',.06),borderWidth:2,pointRadius:3,pointBackgroundColor:'#fd79a8',fill:true,tension:.3,hidden:true},
+{label:'균등기준',data:null,borderColor:'rgba(107,113,148,.35)',borderWidth:1.5,borderDash:[6,4],pointRadius:0,fill:false},
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#6b7194',font:{size:10}}}},
+scales:{x:{ticks:{color:'#6b7194',font:{size:8}},grid:{color:'rgba(0,0,0,.03)'}},y:{ticks:{color:'#6b7194',callback:v=>v+'%'},grid:{color:'rgba(0,0,0,.03)'},title:{display:true,text:'점유율%',color:'#6b7194'}}}}});
+uConc();
+}
+function uConc(){
+if(!CH.cn)return;
+const eq=(concN/NM)*100;
+CH.cn.data.datasets[0].hidden=concN!==5;
+CH.cn.data.datasets[1].hidden=concN!==7;
+CH.cn.data.datasets[2].hidden=concN!==10;
+CH.cn.data.datasets[3].data=Array(NS).fill(eq);
+CH.cn.data.datasets[3].label=`균등기준 (${eq.toFixed(1)}%)`;
+CH.cn.update();
+}
+
+// Heatmap as HTML table with color-coded cells
+function rHeatmap(){
+const sorted=tsS.map(x=>x.i);
+let h='<table class="hm"><thead><tr><th>멤버</th>';
+SN.forEach(s=>h+=`<th>${s}</th>`);
+h+='<th>평균</th></tr></thead><tbody>';
+sorted.forEach(mi=>{
+h+=`<tr><td style="color:${M[mi].c}"><b>${M[mi].id}</b> ${M[mi].n}</td>`;
+for(let s=0;s<NS;s++){
+const r=RK[mi][s];
+// Color: green(1) -> yellow(12) -> red(24)
+const t=1-(r-1)/23;
+const red=Math.round(240-t*190),green=Math.round(70+t*160),blue=Math.round(70+t*70);
+const bg=`rgba(${red},${green},${blue},0.2)`;
+const fg=`rgb(${Math.round(red*.7)},${Math.round(green*.7)},${Math.round(blue*.7)})`;
+h+=`<td style="background:${bg};color:${fg}"><span class="hm-rank">${r}</span></td>`;
+}
+const avg=ARK[mi];
+h+=`<td style="font-weight:700;color:var(--ac)">${avg.toFixed(1)}</td></tr>`;
+});
+h+='</tbody></table>';
+document.getElementById('hmw').innerHTML=h;
+}
+
+// Box plot
+function rBox(){
+const sorted=tsS.map(x=>x.i);
+const labels=sorted.map(i=>`${M[i].id} ${M[i].n}`);
+const mins=[],q1s=[],meds=[],q3s=[],maxs=[];
+sorted.forEach(i=>{const r=[...RK[i]].sort((a,b)=>a-b),n=r.length;mins.push(r[0]);maxs.push(r[n-1]);meds.push((r[Math.floor(n/2)]+r[Math.ceil(n/2)-1])/2);q1s.push(r[Math.floor(n/4)]);q3s.push(r[Math.floor(3*n/4)]);});
+CH.bx=new Chart(document.getElementById('bxc').getContext('2d'),{type:'bar',data:{labels,datasets:[
+{label:'Min~Q1',data:sorted.map((_,i)=>[mins[i],q1s[i]]),backgroundColor:rgba('#00b894',.25),borderColor:'#00b894',borderWidth:1,borderSkipped:false,borderRadius:2},
+{label:'Q1~Med',data:sorted.map((_,i)=>[q1s[i],meds[i]]),backgroundColor:rgba('#6c5ce7',.35),borderColor:'#6c5ce7',borderWidth:1,borderSkipped:false},
+{label:'Med~Q3',data:sorted.map((_,i)=>[meds[i],q3s[i]]),backgroundColor:rgba('#6c5ce7',.2),borderColor:'#6c5ce7',borderWidth:1,borderSkipped:false},
+{label:'Q3~Max',data:sorted.map((_,i)=>[q3s[i],maxs[i]]),backgroundColor:rgba('#e17055',.25),borderColor:'#e17055',borderWidth:1,borderSkipped:false,borderRadius:2},
+]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#6b7194',font:{size:9}}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.raw[0]}~${c.raw[1]}위`}}},
+scales:{x:{min:0,max:25,ticks:{color:'#6b7194',stepSize:2},grid:{color:'rgba(0,0,0,.03)'},title:{display:true,text:'등수(1=최고)',color:'#6b7194'}},y:{ticks:{color:'#1a1a2e',font:{size:9,family:'Pretendard'}},grid:{display:false}}}}});
+}
+
+// Scatter 1: Average Sales vs CV (stability)
+function rSc1(){
+const data=M.map((_,i)=>{
+const avg=TS[i]/NS;
+const vals=D[i];
+const mn=vals.reduce((a,b)=>a+b,0)/NS;
+const cv=Math.sqrt(vals.reduce((s,v)=>s+(v-mn)**2,0)/NS)/mn*100;
+return{x:avg,y:cv};
+});
+CH.s1=new Chart(document.getElementById('sc1').getContext('2d'),{type:'scatter',data:{datasets:[{
+data,backgroundColor:M.map(m=>rgba(m.c,.7)),borderColor:M.map(m=>m.c),borderWidth:2,pointRadius:8,pointHoverRadius:11,
+}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{
+title:()=>'',label:c=>{const i=c.dataIndex;return[`${M[i].id} ${M[i].n}`,`평균: ${fmt(Math.round(c.raw.x))}개/시즌`,`CV: ${c.raw.y.toFixed(1)}%`];}
+}}},scales:{
+x:{ticks:{color:'#6b7194',callback:v=>fW(v)},grid:{color:'rgba(0,0,0,.04)'},title:{display:true,text:'시즌 평균 판매량 →',color:'#6b7194'}},
+y:{ticks:{color:'#6b7194',callback:v=>v+'%'},grid:{color:'rgba(0,0,0,.04)'},title:{display:true,text:'변동계수 CV % (높을수록 불안정) →',color:'#6b7194'}}
+}}});
+}
+
+// Scatter 2: Growth trend (linear slope) vs Avg Rank
+function rSc2(){
+const data=M.map((_,i)=>{
+// Simple linear regression slope of sales over seasons
+const n=NS,xs=[...Array(n).keys()];
+const mx=xs.reduce((a,b)=>a+b,0)/n,my=D[i].reduce((a,b)=>a+b,0)/n;
+const num=xs.reduce((s,x,j)=>s+(x-mx)*(D[i][j]-my),0);
+const den=xs.reduce((s,x)=>s+(x-mx)**2,0);
+const slope=den?num/den:0;
+return{x:ARK[i],y:slope};
+});
+CH.s2=new Chart(document.getElementById('sc2').getContext('2d'),{type:'scatter',data:{datasets:[{
+data,backgroundColor:M.map(m=>rgba(m.c,.7)),borderColor:M.map(m=>m.c),borderWidth:2,pointRadius:8,pointHoverRadius:11,
+}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{
+title:()=>'',label:c=>{const i=c.dataIndex;return[`${M[i].id} ${M[i].n}`,`평균등수: ${c.raw.x.toFixed(1)}위`,`성장기울기: ${c.raw.y>=0?'+':''}${c.raw.y.toFixed(0)}`];}
+}},annotation:{}},scales:{
+x:{reverse:true,ticks:{color:'#6b7194'},grid:{color:'rgba(0,0,0,.04)'},title:{display:true,text:'← 평균 등수 (낮을수록 상위)',color:'#6b7194'}},
+y:{ticks:{color:'#6b7194'},grid:{color:'rgba(0,0,0,.04)'},title:{display:true,text:'판매 성장 기울기 (양수=상승 추세) →',color:'#6b7194'}}
+}}});
+}
+
+// Scatter 3: Early avg (first 6 seasons) vs Late avg (last 6 seasons)
+function rSc3(){
+const data=M.map((_,i)=>{
+const early=D[i].slice(0,6).reduce((a,b)=>a+b,0)/6;
+const late=D[i].slice(-6).reduce((a,b)=>a+b,0)/6;
+return{x:early,y:late};
+});
+// diagonal line data
+const allVals=data.flatMap(d=>[d.x,d.y]);
+const mn=Math.min(...allVals),mx=Math.max(...allVals);
+CH.s3=new Chart(document.getElementById('sc3').getContext('2d'),{type:'scatter',data:{datasets:[
+{label:'기준선(변화없음)',type:'line',data:[{x:mn,y:mn},{x:mx,y:mx}],borderColor:'rgba(107,113,148,.35)',borderWidth:1.5,borderDash:[6,4],pointRadius:0,fill:false,order:10},
+{data,backgroundColor:M.map(m=>rgba(m.c,.7)),borderColor:M.map(m=>m.c),borderWidth:2,pointRadius:8,pointHoverRadius:11,order:1}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{
+title:()=>'',label:c=>{if(c.datasetIndex===0)return'';const i=c.dataIndex;const d=c.raw;const chg=((d.y-d.x)/d.x*100).toFixed(1);return[`${M[i].id} ${M[i].n}`,`초기평균: ${fmt(Math.round(d.x))}`,`최근평균: ${fmt(Math.round(d.y))}`,`변화: ${chg}%`];}
+}}},scales:{
+x:{ticks:{color:'#6b7194',callback:v=>fW(v)},grid:{color:'rgba(0,0,0,.04)'},title:{display:true,text:'초기 6시즌 평균 →',color:'#6b7194'}},
+y:{ticks:{color:'#6b7194',callback:v=>fW(v)},grid:{color:'rgba(0,0,0,.04)'},title:{display:true,text:'최근 6시즌 평균 →',color:'#6b7194'}}
+}}});
+}
+
+// Ranking bars
+function rTB(){
+CH.tb=new Chart(document.getElementById('tbc').getContext('2d'),{type:'bar',data:{labels:tsS.map(x=>`${M[x.i].id} ${M[x.i].n}`),datasets:[{data:tsS.map(x=>TS[x.i]),backgroundColor:tsS.map(x=>rgba(M[x.i].c,.7)),borderColor:tsS.map(x=>M[x.i].c),borderWidth:2,borderRadius:5}]},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.raw)+'개'}}},
+scales:{x:{ticks:{color:'#6b7194',callback:v=>fW(v)},grid:{color:'rgba(0,0,0,.03)'}},y:{ticks:{color:'#1a1a2e',font:{size:10,family:'Pretendard',weight:600}},grid:{display:false}}}}});
+}
+function rAR(){
+const s=[...M.map((_,i)=>({i,v:ARK[i]}))].sort((a,b)=>a.v-b.v);
+CH.ar=new Chart(document.getElementById('arc').getContext('2d'),{type:'bar',data:{labels:s.map(x=>`${M[x.i].id} ${M[x.i].n}`),datasets:[{data:s.map(x=>x.v),backgroundColor:s.map(x=>rgba(M[x.i].c,.7)),borderColor:s.map(x=>M[x.i].c),borderWidth:2,borderRadius:5}]},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'평균 '+c.raw.toFixed(1)+'위'}}},
+scales:{x:{ticks:{color:'#6b7194'},grid:{color:'rgba(0,0,0,.03)'},title:{display:true,text:'평균등수 (낮을수록 좋음)',color:'#6b7194'}},y:{ticks:{color:'#1a1a2e',font:{size:10,family:'Pretendard',weight:600}},grid:{display:false}}}}});
+}
+
+// Init
+document.addEventListener('DOMContentLoaded',()=>{
+rT();initMR();initMC();rMB();initMChart();
+rStats();rLorenz();rGini();rCV();initConc();rConc();
+rHeatmap();rBox();rSc1();rSc2();rSc3();rTB();rAR();
+});
+</script>
+</body>
+</html>
