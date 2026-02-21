@@ -8,190 +8,135 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
 <style>
-:root{
-  --bg:#f7f7f9;--sf:#fff;--sf2:#f0f0f3;
-  --bd:#e2e2e7;--bd2:#ededf0;
-  --tx:#1a1a1d;--tx2:#4a4a50;--tx3:#8a8a92;
-  --ac:#2563eb;--ac2:#16a34a;--ac3:#dc2626;--acbg:rgba(37,99,235,.06);
-  --sh:0 1px 3px rgba(0,0,0,.04);--sh2:0 3px 12px rgba(0,0,0,.06);
-  --r:4px;--r2:3px;--tr:.18s;
-}
-[data-theme="dark"]{
-  --bg:#0a0a0a;--sf:#161618;--sf2:#1e1e22;
-  --bd:#2a2a2e;--bd2:#222226;
-  --tx:#e8e8ed;--tx2:#9a9aa2;--tx3:#5a5a62;
-  --ac:#3b82f6;--ac2:#22c55e;--ac3:#ef4444;--acbg:rgba(59,130,246,.08);
-  --sh:0 1px 3px rgba(0,0,0,.2);--sh2:0 3px 12px rgba(0,0,0,.3);
-}
+:root{--bg:#f7f7f9;--sf:#fff;--sf2:#f0f0f3;--bd:#e2e2e7;--bd2:#ededf0;--tx:#1a1a1d;--tx2:#4a4a50;--tx3:#8a8a92;--ac:#2563eb;--ac2:#16a34a;--ac3:#dc2626;--acbg:rgba(37,99,235,.06);--sh:0 1px 3px rgba(0,0,0,.04);--sh2:0 3px 12px rgba(0,0,0,.06);--r:4px;--r2:3px;--tr:.18s}
+[data-theme="dark"]{--bg:#0a0a0a;--sf:#161618;--sf2:#1e1e22;--bd:#2a2a2e;--bd2:#222226;--tx:#e8e8ed;--tx2:#9a9aa2;--tx3:#5a5a62;--ac:#3b82f6;--ac2:#22c55e;--ac3:#ef4444;--acbg:rgba(59,130,246,.08);--sh:0 1px 3px rgba(0,0,0,.2);--sh2:0 3px 12px rgba(0,0,0,.3)}
 *{margin:0;padding:0;box-sizing:border-box}
-html{background:var(--bg);color-scheme:light}
-[data-theme="dark"]{color-scheme:dark}
+html{background:var(--bg);color-scheme:light}[data-theme="dark"]{color-scheme:dark}
 body{font-family:Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;line-height:1.5;transition:background .3s,color .3s}
 ::-webkit-scrollbar{height:3px;width:3px}::-webkit-scrollbar-thumb{background:var(--tx3);border-radius:2px}
-
-/* ═══ Top Bar ═══ */
 .topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--sf);border-bottom:1px solid var(--bd);height:48px;display:flex;align-items:center;padding:0 16px;transition:background .3s,border-color .3s}
-.brand{font-size:.76rem;font-weight:800;letter-spacing:-.2px;color:var(--tx);flex-shrink:0;margin-right:16px}
-.brand span{color:var(--ac)}
-.topbar-c{flex:1;display:flex;justify-content:center}
-.topbar-r{flex-shrink:0}
-.thb{width:30px;height:30px;border-radius:50%;border:1px solid var(--bd);background:var(--sf2);color:var(--tx2);font-size:.82rem;cursor:pointer;display:grid;place-items:center;transition:all var(--tr)}
-.thb:hover{background:var(--acbg)}
-
-/* ═══ Main Tabs ═══ */
+.brand{font-size:.76rem;font-weight:800;letter-spacing:-.2px;color:var(--tx);flex-shrink:0;margin-right:16px}.brand span{color:var(--ac)}
+.topbar-c{flex:1;display:flex;justify-content:center}.topbar-r{flex-shrink:0}
+.thb{width:30px;height:30px;border-radius:50%;border:1px solid var(--bd);background:var(--sf2);color:var(--tx2);font-size:.82rem;cursor:pointer;display:grid;place-items:center;transition:all var(--tr)}.thb:hover{background:var(--acbg)}
 .mtabs{display:inline-flex;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:2px;position:relative}
-.mtab{padding:6px 20px;border:none;background:none;color:var(--tx3);font-family:inherit;font-size:.72rem;font-weight:700;cursor:pointer;border-radius:var(--r2);text-align:center;transition:color var(--tr);position:relative;z-index:1;white-space:nowrap}
-.mtab:hover{color:var(--tx2)}.mtab.on{color:#fff}
+.mtab{padding:6px 20px;border:none;background:none;color:var(--tx3);font-family:inherit;font-size:.72rem;font-weight:700;cursor:pointer;border-radius:var(--r2);text-align:center;transition:color var(--tr);position:relative;z-index:1;white-space:nowrap}.mtab:hover{color:var(--tx2)}.mtab.on{color:#fff}
 .mtab-ind{position:absolute;top:2px;bottom:2px;background:var(--ac);border-radius:var(--r2);box-shadow:0 1px 4px rgba(37,99,235,.2);transition:left .25s cubic-bezier(.4,0,.2,1),width .25s cubic-bezier(.4,0,.2,1);z-index:0}
-
 .W{max-width:920px;margin:0 auto;padding:58px 14px 14px;position:relative;z-index:1}
 .pane{display:none;animation:fu .15s ease}.pane.on{display:block}
 @keyframes fu{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-
-/* ═══ Card ═══ */
 .card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:18px 16px;margin-bottom:10px;box-shadow:var(--sh);transition:background .3s,border-color .3s}
-.ct{font-size:.84rem;font-weight:700;letter-spacing:-.2px;margin-bottom:3px}
-.cd{font-size:.62rem;color:var(--tx3);line-height:1.65;margin-bottom:12px}
-.sep{height:1px;background:var(--bd2);margin:14px 0}
-
-/* Pills */
+.ct{font-size:.84rem;font-weight:700;letter-spacing:-.2px;margin-bottom:3px}.cd{font-size:.62rem;color:var(--tx3);line-height:1.65;margin-bottom:12px}.sep{height:1px;background:var(--bd2);margin:14px 0}
 .pills{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
-.pill{padding:5px 12px;border-radius:var(--r);border:1px solid var(--bd);background:var(--sf);color:var(--tx2);font-family:inherit;font-size:.64rem;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
-.pill:hover{border-color:var(--ac);color:var(--ac)}
-.pill.on{background:var(--ac);color:#fff;border-color:var(--ac)}
-.pill.g.on{background:var(--ac2);border-color:var(--ac2)}
-
-/* ═══ Graph Sub-tabs — prominent ═══ */
+.pills-5{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-bottom:8px}
+.pills-6{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:8px}
+.pill{padding:5px 6px;border-radius:var(--r);border:1px solid var(--bd);background:var(--sf);color:var(--tx2);font-family:inherit;font-size:.64rem;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;text-align:center}.pill:hover{border-color:var(--ac);color:var(--ac)}.pill.on{background:var(--ac);color:#fff;border-color:var(--ac)}.pill.g.on{background:var(--ac2);border-color:var(--ac2)}
+.pill.fco{border-color:#86efac}.pill.fco.on{background:#86efac;border-color:#86efac;color:#1a1a1d}
+.pill.dco{border-color:#93c5fd}.pill.dco.on{background:#93c5fd;border-color:#93c5fd;color:#1a1a1d}
+.pill.mco{border-color:#d4d4d8}.pill.mco.on{background:#d4d4d8;border-color:#d4d4d8;color:#1a1a1d}
 .stabs{display:flex;gap:0;margin-bottom:12px;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
-.stab{flex:1;padding:10px 0;border:none;background:var(--sf2);color:var(--tx3);font-family:inherit;font-size:.74rem;font-weight:700;cursor:pointer;text-align:center;transition:all .15s;border-right:1px solid var(--bd)}
-.stab:last-child{border-right:none}
-.stab:hover{color:var(--tx2);background:var(--sf)}
-.stab.on{background:var(--ac);color:#fff}
-
-.chips{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
-.chip{padding:3px 9px;border-radius:var(--r);border:1.5px solid;font-family:inherit;font-size:.6rem;font-weight:700;cursor:pointer;transition:all .1s;background:transparent}
-.chip:active{transform:scale(.96)}
-
-.mbn{font-size:.62rem;color:var(--ac);background:var(--acbg);border-radius:var(--r2);padding:9px 13px;margin-bottom:8px;line-height:1.6;border-left:3px solid var(--ac);max-height:0;overflow:hidden;opacity:0;transition:all .25s ease;padding-top:0;padding-bottom:0;margin-bottom:0}
-.mbn.show{max-height:140px;opacity:1;padding:9px 13px;margin-bottom:8px}
-
-.trend-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;font-size:.6rem;color:var(--tx3)}
-.trend-row label{display:flex;align-items:center;gap:4px;cursor:pointer;font-weight:600}
-.trend-row input[type=checkbox]{accent-color:var(--ac);width:13px;height:13px}
-
+.stab{flex:1;padding:10px 0;border:none;background:var(--sf2);color:var(--tx3);font-family:inherit;font-size:.74rem;font-weight:700;cursor:pointer;text-align:center;transition:all .15s;border-right:1px solid var(--bd)}.stab:last-child{border-right:none}.stab:hover{color:var(--tx2);background:var(--sf)}.stab.on{background:var(--ac);color:#fff}
+.sec-label{font-size:.58rem;font-weight:700;color:var(--tx3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.sec-box{background:var(--sf2);border:1px solid var(--bd2);border-radius:var(--r);padding:10px 10px 6px;margin-bottom:10px}
+.chip-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:4px}
+.chip{padding:4px 0;border-radius:var(--r2);border:1.5px solid;font-family:inherit;font-size:.58rem;font-weight:700;cursor:pointer;transition:all .1s;background:transparent;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.chip:active{transform:scale(.96)}
+.mbn{font-size:.62rem;color:var(--ac);background:var(--acbg);border-radius:var(--r2);padding:9px 13px;margin-bottom:8px;line-height:1.6;border-left:3px solid var(--ac);max-height:0;overflow:hidden;opacity:0;transition:all .25s ease;padding-top:0;padding-bottom:0;margin-bottom:0}.mbn.show{max-height:160px;opacity:1;padding:9px 13px;margin-bottom:8px}
+.trend-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;font-size:.6rem;color:var(--tx3)}.trend-row label{display:flex;align-items:center;gap:4px;cursor:pointer;font-weight:600}.trend-row input[type=checkbox]{accent-color:var(--ac);width:13px;height:13px}
 .rng{margin-bottom:8px}.rng-h{display:flex;justify-content:space-between;font-size:.56rem;color:var(--tx3);margin-bottom:3px;font-weight:600}
-.rng-t{position:relative;height:22px;user-select:none;touch-action:none}
-.rng-t .rl{position:absolute;top:9px;left:0;right:0;height:3px;background:var(--bd);border-radius:1px}
-.rng-t .fl{position:absolute;top:9px;height:3px;background:var(--ac);border-radius:1px;opacity:.4}
-.rng-t .kn{position:absolute;top:2px;width:16px;height:16px;background:var(--sf);border:2px solid var(--ac);border-radius:2px;cursor:grab;z-index:2;transform:translateX(-50%);box-shadow:var(--sh);transition:box-shadow .15s}
-.rng-t .kn:hover{box-shadow:0 0 0 3px rgba(37,99,235,.12)}.rng-t .kn:active{cursor:grabbing}
+.rng-t{position:relative;height:22px;user-select:none;touch-action:none}.rng-t .rl{position:absolute;top:9px;left:0;right:0;height:3px;background:var(--bd);border-radius:1px}.rng-t .fl{position:absolute;top:9px;height:3px;background:var(--ac);border-radius:1px;opacity:.4}.rng-t .kn{position:absolute;top:2px;width:16px;height:16px;background:var(--sf);border:2px solid var(--ac);border-radius:2px;cursor:grab;z-index:2;transform:translateX(-50%);box-shadow:var(--sh);transition:box-shadow .15s}.rng-t .kn:hover{box-shadow:0 0 0 3px rgba(37,99,235,.12)}.rng-t .kn:active{cursor:grabbing}
 .rng-lb{text-align:center;font-size:.56rem;color:var(--tx2);font-weight:600;margin-top:2px}
-
 .cx{position:relative;width:100%;height:390px}.cx.tl{height:520px}
 @media(max-width:640px){.cx{height:320px}.cx.tl{height:450px}}
-
-/* ═══ Table — fully opaque ═══ */
 .tsc{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--r);border:1px solid var(--bd)}
-table{border-collapse:collapse;width:100%;min-width:1300px;font-size:.62rem}
+table{border-collapse:collapse;width:100%;min-width:1400px;font-size:.62rem}
 thead th{background:var(--sf2);color:var(--tx3);padding:8px 4px;text-align:center;font-weight:700;white-space:nowrap;border-bottom:1px solid var(--bd);cursor:pointer;user-select:none;position:sticky;top:0;z-index:2;transition:all .12s;font-size:.57rem}
-thead th:hover{background:var(--ac);color:#fff}
+thead th:hover{background:var(--acbg);color:var(--ac)}
 thead th.asc::after{content:' ↑';font-size:.44rem}thead th.desc::after{content:' ↓';font-size:.44rem}
 tbody td{padding:5px 4px;text-align:right;border-bottom:1px solid var(--bd2);font-feature-settings:'tnum';font-size:.6rem}
 tbody td:first-child{text-align:left;font-weight:700;position:sticky;left:0;background:var(--sf);z-index:1;font-size:.62rem;padding-left:6px;white-space:nowrap}
 tbody tr:hover td{background:var(--acbg)}tbody tr:hover td:first-child{background:var(--sf2)}
 .r1{color:#c2410c;font-weight:800}.r2{color:#636e72;font-weight:700}.r3{color:#b8860b;font-weight:700}
 td.hi{color:var(--ac);font-weight:700}td.hi2{color:var(--ac2);font-weight:700}
-
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:6px}
-.sc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:11px 9px;text-align:center;transition:all var(--tr)}
-.sc:hover{box-shadow:var(--sh2)}
-.sc .lb{font-size:.54rem;color:var(--tx3);font-weight:600;margin-bottom:2px}
-.sc .vl{font-size:1.05rem;font-weight:800;font-feature-settings:'tnum';letter-spacing:-.4px}
-.sc .nt{font-size:.52rem;color:var(--tx3);margin-top:2px}
-
+.sc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:11px 9px;text-align:center;transition:all var(--tr)}.sc:hover{box-shadow:var(--sh2)}
+.sc .lb{font-size:.54rem;color:var(--tx3);font-weight:600;margin-bottom:2px}.sc .vl{font-size:1.05rem;font-weight:800;font-feature-settings:'tnum';letter-spacing:-.4px}.sc .nt{font-size:.52rem;color:var(--tx3);margin-top:2px}
 .hsc{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--r)}
-.hm{border-collapse:collapse;font-size:.53rem;min-width:820px;width:100%}
+.hm{border-collapse:collapse;font-size:.53rem;min-width:860px;width:100%}
 .hm th{padding:4px 2px;background:var(--sf2);color:var(--tx3);font-weight:700;text-align:center;white-space:nowrap;border:1px solid var(--bd);position:sticky;top:0;z-index:2;font-size:.5rem}
 .hm td{padding:3px 1px;text-align:center;font-weight:700;font-size:.53rem;border:1px solid var(--bd2);min-width:31px;font-feature-settings:'tnum'}
 .hm td:first-child{text-align:left;font-weight:700;position:sticky;left:0;z-index:1;background:var(--sf);padding-left:5px;min-width:60px;white-space:nowrap;font-size:.55rem}
-
 .podg{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:8px}
-.pod{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:9px;display:flex;align-items:center;gap:7px;transition:all .15s}
-.pod:hover{box-shadow:var(--sh2)}
+.pod{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:9px;display:flex;align-items:center;gap:7px;transition:all .15s}.pod:hover{box-shadow:var(--sh2)}
 .pod-ic{width:28px;height:28px;border-radius:var(--r);display:grid;place-items:center;font-weight:800;font-size:.56rem;flex-shrink:0}
-.pod-nm{font-size:.7rem;font-weight:700}
-.pod-bd{display:flex;gap:3px;margin-top:2px}
+.pod-nm{font-size:.7rem;font-weight:700}.pod-bd{display:flex;gap:3px;margin-top:2px}
 .pod-b{font-size:.49rem;font-weight:700;padding:1px 5px;border-radius:var(--r2)}
-
 .hint{font-size:.53rem;color:var(--tx3);text-align:right;margin-bottom:3px}
-.scatter-wrap{display:none}.scatter-wrap.on{display:block}
-.ts-wrap{display:none}.ts-wrap.on{display:block}
-
-@media(max-width:640px){.W{padding:56px 10px 10px}.brand{font-size:.68rem;margin-right:8px}.mtab{padding:6px 13px;font-size:.66rem}.sg{grid-template-columns:repeat(2,1fr)}.sc .vl{font-size:.9rem}.podg{grid-template-columns:repeat(2,1fr)}}
+.scatter-wrap{display:none}.scatter-wrap.on{display:block}.ts-wrap{display:none}.ts-wrap.on{display:block}
+@media(max-width:640px){.W{padding:56px 10px 10px}.brand{font-size:.68rem;margin-right:8px}.mtab{padding:6px 13px;font-size:.66rem}.sg{grid-template-columns:repeat(2,1fr)}.sc .vl{font-size:.9rem}.podg{grid-template-columns:repeat(2,1fr)}.chip{font-size:.5rem;padding:4px 0}.pill{font-size:.56rem;padding:5px 3px}.pills-6{grid-template-columns:repeat(6,1fr);gap:3px}}
 </style>
 </head>
 <body>
-
 <div class="topbar">
 <div class="brand"><span>TripleS</span> Objekt Statistics</div>
-<div class="topbar-c"><nav class="mtabs" id="nav"><div class="mtab-ind" id="nI"></div><button class="mtab on" data-t="main">메인</button><button class="mtab" data-t="graph">그래프</button><button class="mtab" data-t="analysis">분석</button></nav></div>
+<div class="topbar-c"><nav class="mtabs" id="nav"><div class="mtab-ind" id="nI"></div><button class="mtab on" data-t="main">순위</button><button class="mtab" data-t="graph">그래프</button><button class="mtab" data-t="analysis">분석</button></nav></div>
 <div class="topbar-r"><button class="thb" id="thB">🌙</button></div>
 </div>
-
 <div class="W">
-
-<!-- ═══ MAIN ═══ -->
+<!-- MAIN -->
 <section class="pane on" id="p-main">
-<div class="card"><div class="ct">오브젝트 판매량 일람</div><div class="cd">각 열의 헤더를 탭하면 오름차순 또는 내림차순으로 정렬됩니다. 좌우로 스크롤하여 전체 시즌을 확인할 수 있습니다.</div>
-<div class="pills"><button class="pill on" onclick="stm('s',this)">판매량</button><button class="pill" onclick="stm('r',this)">등수</button></div>
+<div class="card"><div class="ct">RANK</div><div class="cd">19시즌 중 1위·2위·3위에 오른 횟수입니다. 포인트는 🥇×3 + 🥈×2 + 🥉×1로 산출됩니다.</div><div class="podg" id="podG"></div></div>
+<div class="card"><div class="ct">오브젝트 판매량 일람</div><div class="cd">각 열의 헤더를 탭하면 정렬됩니다. 좌우로 스크롤하여 전체 시즌을 확인할 수 있습니다.</div>
+<div class="stabs" id="tblSub"><button class="stab on" onclick="stm('s',this)">판매량</button><button class="stab" onclick="stm('r',this)">등수</button></div>
 <div class="tsc" id="tW"></div></div>
-<div class="card"><div class="ct">총 판매량 순위</div><div class="cd">18개 시즌의 판매량을 합산하여 높은 순서대로 정렬한 순위입니다.</div><div class="cx tl"><canvas id="tbC"></canvas></div></div>
-<div class="card"><div class="ct">평균 등수 순위</div><div class="cd">18시즌 동안 기록한 등수의 산술 평균입니다. 수치가 낮을수록 꾸준히 상위권을 유지한 것을 의미합니다.</div><div class="cx tl"><canvas id="arC"></canvas></div></div>
-<div class="card"><div class="ct">RANK</div><div class="cd">18시즌 중 1위·2위·3위에 오른 횟수입니다. 포인트는 🥇×3 + 🥈×2 + 🥉×1로 산출됩니다.</div><div class="podg" id="podG"></div></div>
-<div class="card"><div class="ct">시즌 정규화 순위</div><div class="cd">각 시즌의 전체 평균을 100으로 환산한 뒤 합산한 순위입니다. 시즌별 전체 판매 규모의 차이를 통제하여 순수한 상대적 인기를 비교합니다.</div><div class="cx tl"><canvas id="nrC"></canvas></div></div>
+<div class="card"><div class="ct">총 판매량 순위</div><div class="cd">19개 시즌 판매량 합산 순위입니다.</div><div class="cx tl"><canvas id="tbC"></canvas></div></div>
+<div class="card"><div class="ct">평균 등수 순위</div><div class="cd">19시즌 등수의 산술 평균입니다. 수치가 낮을수록 꾸준히 상위권을 유지한 것을 의미합니다.</div><div class="cx tl"><canvas id="arC"></canvas></div></div>
+<div class="card"><div class="ct">시즌 정규화 순위</div><div class="cd">각 시즌의 전체 평균을 100으로 환산한 뒤 합산한 순위입니다.</div><div class="cx tl"><canvas id="nrC"></canvas></div></div>
 </section>
-
-<!-- ═══ GRAPH ═══ -->
+<!-- GRAPH -->
 <section class="pane" id="p-graph"><div class="card">
 <div class="stabs" id="gSub"><button class="stab on" data-s="ts">시계열 그래프</button><button class="stab" data-s="sc">산점도</button></div>
 <div class="ts-wrap on" id="tsW"><div class="ct">시계열 그래프</div><div class="cd">분석 모드를 선택하면 하단에 상세 설명이 표시됩니다. 슬라이더를 드래그하여 특정 시즌 구간만 조회할 수 있습니다.</div>
-<div class="pills" id="cmr"></div><div class="mbn" id="mB"></div>
+<div class="pills-6" id="cmr"></div><div class="mbn" id="mB"></div>
 <div class="rng"><div class="rng-h"><span id="rL"></span><span id="rR"></span></div><div class="rng-t" id="rT"><div class="rl"></div><div class="fl" id="rF"></div><div class="kn" id="rA"></div><div class="kn" id="rB"></div></div><div class="rng-lb" id="rI"></div></div>
 <div class="trend-row"><label><input type="checkbox" id="trendCb"> 선형 추세선 표시</label><span id="trendInfo"></span></div></div>
-<div class="scatter-wrap" id="scW"><div class="ct">산점도</div><div class="cd">멤버 간의 관계를 2차원 평면에 배치하여 비교합니다. 아래에서 멤버를 선택하면 해당 멤버가 하이라이트됩니다.</div></div>
+<div class="scatter-wrap" id="scW"><div class="ct">산점도</div><div class="cd">멤버 간의 관계를 2차원 평면에 배치하여 비교합니다. 오브젝트 유형 필터가 산점도 계산에 반영됩니다.</div></div>
 <div class="sep"></div>
-<div class="pills" id="mcc"></div><div class="chips" id="chips"></div>
+<!-- Season type filter -->
+<div class="sec-box"><div class="sec-label">오브젝트 유형</div>
+<div class="pills-5" id="stPills"></div></div>
+<!-- Member selection -->
+<div class="sec-box"><div class="sec-label">멤버 선택</div>
+<div class="pills-5" id="mcc"></div>
+<div class="chip-grid" id="chips"></div></div>
+<!-- Charts -->
 <div class="ts-wrap on" id="tsC"><div class="cx"><canvas id="mainC"></canvas></div></div>
 <div class="scatter-wrap" id="scC">
-<div class="card" style="padding:14px;margin-bottom:8px"><div style="font-size:.72rem;font-weight:700;margin-bottom:2px">평균 판매량 vs 안정성</div><div class="cd" style="margin-bottom:8px">가로축은 시즌당 평균 판매량(우측일수록 인기가 많음), 세로축은 변동계수 CV(상단일수록 시즌 간 불안정)입니다. 우측 하단에 위치할수록 이상적입니다.</div><div class="cx"><canvas id="s1C"></canvas></div></div>
-<div class="card" style="padding:14px;margin-bottom:8px"><div style="font-size:.72rem;font-weight:700;margin-bottom:2px">성장 추세 vs 평균 등수</div><div class="cd" style="margin-bottom:8px">가로축은 평균 등수(우측으로 갈수록 1위에 가까움), 세로축은 시계열 회귀 기울기(양수이면 성장 추세)입니다. 우측 상단이 이상적입니다.</div><div class="cx"><canvas id="s2C"></canvas></div></div>
-<div class="card" style="padding:14px;margin-bottom:8px"><div style="font-size:.72rem;font-weight:700;margin-bottom:2px">초기 vs 최근 판매량</div><div class="cd" style="margin-bottom:8px">가로축은 초기 6시즌 평균, 세로축은 최근 6시즌 평균입니다. 대각선 위에 위치하면 성장, 아래에 위치하면 감소한 멤버입니다.</div><div class="cx"><canvas id="s3C"></canvas></div></div>
-<div class="card" style="padding:14px;margin-bottom:8px"><div style="font-size:.72rem;font-weight:700;margin-bottom:2px">정규화 등수 vs 변동폭</div><div class="cd" style="margin-bottom:8px">시즌별 전체 판매량 차이를 통제한 뒤 산출한 평균 등수(우측일수록 상위)와 등수 표준편차(하단일수록 안정)입니다. 우측 하단이 이상적입니다.</div><div class="cx"><canvas id="s4C"></canvas></div></div>
+<div class="card" style="padding:14px;margin-bottom:8px"><div style="font-size:.72rem;font-weight:700;margin-bottom:2px">평균 판매량 vs 안정성</div><div class="cd" style="margin-bottom:8px">가로축은 시즌당 평균 판매량, 세로축은 변동계수 CV. 우측 하단이 이상적입니다.</div><div class="cx"><canvas id="s1C"></canvas></div></div>
+<div class="card" style="padding:14px;margin-bottom:8px"><div style="font-size:.72rem;font-weight:700;margin-bottom:2px">성장 추세 vs 평균 등수</div><div class="cd" style="margin-bottom:8px">가로축은 평균 등수(우측=1위), 세로축은 회귀 기울기(양수=성장). 우측 상단이 이상적입니다.</div><div class="cx"><canvas id="s2C"></canvas></div></div>
+<div class="card" style="padding:14px;margin-bottom:8px"><div style="font-size:.72rem;font-weight:700;margin-bottom:2px">초기 vs 최근 판매량</div><div class="cd" style="margin-bottom:8px">대각선 위=성장, 아래=감소. 오브젝트 유형 필터에 따라 초기/최근 구간이 자동 조정됩니다.</div><div class="cx"><canvas id="s3C"></canvas></div></div>
+<div class="card" style="padding:14px;margin-bottom:8px"><div style="font-size:.72rem;font-weight:700;margin-bottom:2px">정규화 등수 vs 변동폭</div><div class="cd" style="margin-bottom:8px">우측=상위, 하단=안정. 우측 하단이 이상적입니다.</div><div class="cx"><canvas id="s4C"></canvas></div></div>
 </div>
 </div></section>
-
-<!-- ═══ ANALYSIS ═══ -->
+<!-- ANALYSIS -->
 <section class="pane" id="p-analysis">
-<div class="card"><div class="ct">핵심 지표 요약</div><div class="cd">tripleS 전체 24명 멤버의 18개 시즌 판매 데이터를 종합하여, 총 판매량·평균·표준편차·지니계수·변동계수 등 분배와 격차를 진단하는 핵심 통계량을 산출합니다. 이 지표들을 통해 멤버 간 인기 편차의 구조적 특성을 파악할 수 있습니다.</div><div class="sg" id="stG"></div></div>
-<div class="card"><div class="ct">로렌츠 곡선과 지니계수</div><div class="cd">로렌츠 곡선은 판매량이 적은 멤버부터 순서대로 누적한 비율을 그린 것입니다. 완전 균등 분배일 경우 대각선과 일치하며, 곡선이 대각선에서 멀어질수록 소수 멤버에게 판매가 집중되어 있음을 뜻합니다. 지니계수는 이 괴리 면적의 2배로 산출되며, 0에 가까울수록 균등, 1에 가까울수록 불균등한 분배입니다.</div><div class="cx"><canvas id="lzC"></canvas></div><div id="lzM" style="margin-top:8px"></div></div>
-<div class="card"><div class="ct">시즌별 지니계수 추이</div><div class="cd">각 시즌 내에서 24명의 판매량을 바탕으로 산출한 지니계수의 시계열입니다. 특정 시즌에 지니계수가 상승했다면, 해당 시즌에서 일부 멤버에게 판매가 집중되었음을 의미합니다. 슬라이더를 이용하여 특정 구간만 확대하여 살펴볼 수 있습니다.</div>
+<div class="card"><div class="ct">핵심 지표 요약</div><div class="cd">tripleS 전체 24명 멤버의 19개 시즌 판매 데이터를 종합하여, 총 판매량·평균·표준편차·지니계수·변동계수 등 분배와 격차를 진단하는 핵심 통계량을 산출합니다.</div><div class="sg" id="stG"></div></div>
+<div class="card"><div class="ct">로렌츠 곡선과 지니계수</div><div class="cd">판매량이 적은 멤버부터 누적한 비율을 그린 곡선입니다. 대각선에서 멀어질수록 소수 멤버에게 판매가 집중되어 있음을 뜻합니다. 지니계수는 이 괴리 면적의 2배로 산출되며, 0에 가까울수록 균등합니다.</div><div class="cx"><canvas id="lzC"></canvas></div><div id="lzM" style="margin-top:8px"></div></div>
+<div class="card"><div class="ct">시즌별 지니계수 추이</div><div class="cd">각 시즌 내에서 24명의 판매량을 바탕으로 산출한 지니계수의 시계열입니다. 상승 시 해당 시즌에 일부 멤버에게 판매가 집중되었음을 의미합니다.</div>
 <div class="rng"><div class="rng-h"><span id="gL"></span><span id="gR"></span></div><div class="rng-t" id="gT"><div class="rl"></div><div class="fl" id="gF"></div><div class="kn" id="gA"></div><div class="kn" id="gB"></div></div><div class="rng-lb" id="gI"></div></div>
 <div class="cx"><canvas id="giC"></canvas></div></div>
-<div class="card"><div class="ct">시즌별 변동계수 (CV)</div><div class="cd">변동계수(Coefficient of Variation)는 표준편차를 평균으로 나눈 뒤 100을 곱한 값으로, 평균 대비 멤버 간 격차의 상대적 크기를 나타냅니다. 수치가 높을수록 해당 시즌에서 특정 멤버로의 쏠림이 컸음을 의미합니다. 색상 구분: 초록(CV ≤ 35%), 주황(35~45%), 빨강(45% 초과).</div><div class="cx"><canvas id="cvC"></canvas></div></div>
-<div class="card"><div class="ct">상위 집중도 추이</div><div class="cd">각 시즌에서 판매량 상위 N명이 전체 판매량에서 차지하는 비율(%)을 추적합니다. 점선은 24명이 완전히 균등하게 분배된 경우의 이론적 비율입니다. 상위 집중도가 이론 비율을 크게 초과할수록, 소수 인기 멤버에 대한 의존도가 높은 시즌임을 시사합니다.</div><div class="pills" id="cBt"></div><div class="cx"><canvas id="cnC"></canvas></div></div>
-<div class="card"><div class="ct">등수 히트맵</div><div class="cd">18개 시즌 동안 각 멤버가 기록한 등수를 색상으로 표현한 표입니다. 초록색에 가까울수록 상위(1위에 가까움), 붉은색에 가까울수록 하위입니다. 세로축은 총 판매량 순으로 정렬되어 있으며, 가로로 일관된 색상 패턴을 보이는 멤버일수록 시즌 간 순위가 안정적입니다. 색상이 급격히 변하는 지점은 해당 시즌에서 순위 변동이 있었음을 의미합니다.</div><div class="hint">← 좌우 스크롤 →</div><div class="hsc" id="hmW"></div></div>
-<div class="card"><div class="ct">등수 분포 (박스플롯 근사)</div><div class="cd">18시즌 동안 기록한 등수의 범위를 사분위(Q1, 중앙값, Q3)로 구분하여 표시합니다. 보라색 영역이 사분위범위(IQR)이며, 이 범위가 좁을수록 시즌 간 순위 변동이 적어 안정적인 멤버입니다. 양쪽 끝은 18시즌 중 기록한 최고 등수와 최저 등수를 나타냅니다.</div><div class="cx tl"><canvas id="bxC"></canvas></div></div>
+<div class="card"><div class="ct">시즌별 변동계수 (CV)</div><div class="cd">변동계수는 표준편차÷평균×100으로, 수치가 높을수록 해당 시즌에서 특정 멤버로의 쏠림이 큽니다. 초록(≤35%), 주황(35~45%), 빨강(45%↑).</div><div class="cx"><canvas id="cvC"></canvas></div></div>
+<div class="card"><div class="ct">상위 집중도 추이</div><div class="cd">각 시즌에서 판매량 상위 N명이 전체 판매에서 차지하는 비율(%)입니다. 점선은 24명 완전 균등 분배 시 이론적 비율입니다.</div><div class="pills" id="cBt"></div><div class="cx"><canvas id="cnC"></canvas></div></div>
+<div class="card"><div class="ct">등수 히트맵</div><div class="cd">19개 시즌 동안 각 멤버의 등수를 색상으로 표현합니다. 초록=상위, 붉은색=하위. 세로축은 총 판매량 순 정렬입니다.</div><div class="hint">← 좌우 스크롤 →</div><div class="hsc" id="hmW"></div></div>
+<div class="card"><div class="ct">등수 분포 (박스플롯 근사)</div><div class="cd">19시즌 등수의 범위를 사분위로 구분합니다. 범위가 좁을수록 안정적입니다.</div><div class="cx tl"><canvas id="bxC"></canvas></div></div>
 </section>
-
 </div>
 <script>
 const M=[{id:'S1',n:'서연',c:'#22AEFF'},{id:'S2',n:'혜린',c:'#9200FF'},{id:'S3',n:'지우',c:'#EED500'},{id:'S4',n:'채연',c:'#7ACC15'},{id:'S5',n:'유연',c:'#DB0C74'},{id:'S6',n:'수민',c:'#FC83A4'},{id:'S7',n:'나경',c:'#4E8A92'},{id:'S8',n:'유빈',c:'#E8A0A0'},{id:'S9',n:'카에데',c:'#E8B420'},{id:'S10',n:'다현',c:'#F080C0'},{id:'S11',n:'코토네',c:'#E8C800'},{id:'S12',n:'연지',c:'#5974FF'},{id:'S13',n:'니엔',c:'#FF953F'},{id:'S14',n:'소현',c:'#2040D0'},{id:'S15',n:'신위',c:'#D51313'},{id:'S16',n:'마유',c:'#FE8E76'},{id:'S17',n:'린',c:'#AC62B7'},{id:'S18',n:'주빈',c:'#80C830'},{id:'S19',n:'하연',c:'#30C8A0'},{id:'S20',n:'시온',c:'#FF428A'},{id:'S21',n:'채원',c:'#B088D0'},{id:'S22',n:'설린',c:'#5EA870'},{id:'S23',n:'서아',c:'#80C8E0'},{id:'S24',n:'지연',c:'#F09848'}];
-const SN=['D1·1','D1·2','D1·3','24S','E1·1','E1·2','E1·3','24X','25🌸','A2·1','A2·2','A2·3','25S','25SN','B2·1','B2·2','25X','26V'];
-const SL=['디바인01 1st','디바인01 2nd','디바인01 3rd','24 써머','에버01 1st','에버01 2nd','에버01 3rd','24크리스마스','25벚꽃','아톰02 1st','아톰02 2nd','아톰02 3rd','25 써머','25 써머나잇','바이너리02 1st','바이너리02 2nd','25크리스마스','26발렌타인'];
-const D=[[9493,16472,14092,6248,16582,15497,12745,7566,4499,20436,14471,15488,6262,4607,14138,10390,4003,3629],[3069,4791,4451,1640,5120,4019,5466,2241,1055,4762,6006,4197,1901,1632,4045,4750,1249,1302],[4005,6335,7128,2753,7530,6716,6354,2833,1957,6465,7262,6845,3281,2878,6324,6468,2529,2229],[2960,5124,4774,1927,5483,5250,5203,2078,1616,4788,4782,5133,2150,1535,5001,4341,2278,2067],[9350,18241,12356,7882,16288,14761,13125,6921,4209,12692,12111,15803,6179,4687,12436,10082,4708,3567],[3626,6440,5480,2444,9045,6325,6246,2671,1738,4322,6462,4273,2043,1538,3580,3622,1772,1894],[4631,11510,10421,5368,13402,12054,10068,6019,3722,10699,10436,10440,5141,3454,9441,8144,4181,3725],[3796,5933,5043,2771,7324,7343,7803,3855,2069,5730,8961,7685,3656,2883,7448,7507,3038,2661],[3639,4592,4638,2340,5760,5393,7419,2528,2081,4914,4830,5059,2648,1660,4162,5718,2332,2246],[3379,4659,4038,2015,5616,5443,6482,2477,1610,4882,4659,5290,2143,1533,4239,4536,1560,1654],[4789,7911,6731,3331,7920,9230,8942,4068,2774,6867,6964,9449,3816,2936,7910,7953,3839,2981],[2854,5240,5396,2656,6731,6225,6690,2966,1700,5444,6767,6649,2663,1880,4168,6135,3470,2793],[3948,5793,5420,3073,5779,7029,6916,2987,2469,7419,6346,7069,4217,2525,7476,5847,2870,2293],[5476,9425,7283,5304,9134,10291,9362,4335,2904,6588,6719,8835,3675,2655,6359,5889,3184,2402],[5033,7876,6184,4951,7343,8571,7590,4172,2581,6513,6414,6949,3559,2296,4235,3863,2139,1738],[3237,3738,4717,2294,5295,5816,6156,2606,1784,4839,5261,4474,1772,1576,3670,3527,1876,1772],[3521,5025,3302,2433,4741,5385,5920,2446,1772,3685,5201,4831,2576,1382,4324,4799,2581,2345],[2748,3854,3873,1753,4818,5564,5342,1854,1002,4108,3607,3716,2272,1258,4268,4043,1694,2068],[3239,6714,5363,3020,6121,9678,8582,3190,2535,7254,7509,9557,4220,2698,6249,7199,4211,3348],[2745,4975,3758,2761,5654,4918,5258,2488,1865,4375,3893,4961,2307,1851,4616,5261,2579,2386],[5013,9236,7749,5021,10384,8268,9555,4777,1951,4531,6751,7951,3437,2467,8800,7921,4847,3874],[4508,4136,3329,2589,4087,4750,5831,1712,1614,3440,3437,4394,2131,1152,3361,2811,1625,1441],[4902,5688,4389,2674,4767,5085,5482,2266,1589,3687,4607,4694,1703,1281,3401,3318,2049,1614],[7404,6305,5185,3628,7180,9273,9622,4217,3026,8314,6966,10648,4039,3098,7065,5685,4210,3582]];
-const TS=[196618,61696,89892,66490,185398,73521,142856,95506,71959,66215,108411,80427,89476,109820,92007,64410,66269,57842,100687,66651,112533,56348,63196,109447];
-const TR=[865119200,271462400,395524800,292556000,815751200,323492400,628566400,420226400,316619600,291346000,477008400,353878800,393694400,483208000,404830800,283404000,291583600,254504800,443022800,293264400,495145200,247931200,278062400,481566800];
-const NS=SN.length,NM=M.length;
+const SN=['D1·1','D1·2','D1·3','24S','E1·1','E1·2','E1·3','24X','25🌸','A2·1','A2·2','A2·3','25S','25SN','B2·1','MCO','B2·2','25X','26V'];
+const SL=['디바인01 1st','디바인01 2nd','디바인01 3rd','24 써머','에버01 1st','에버01 2nd','에버01 3rd','24크리스마스','25벚꽃','아톰02 1st','아톰02 2nd','아톰02 3rd','25 써머','25 써머나잇','바이너리02 1st','25 MCO','바이너리02 2nd','25크리스마스','26발렌타인'];
+const ST=['FCO','FCO','FCO','DCO','FCO','FCO','FCO','DCO','DCO','FCO','FCO','FCO','DCO','DCO','FCO','MCO','FCO','DCO','DCO'];
+const D=[[9493,16472,14092,6248,16582,15497,12745,7566,4499,20436,14471,15488,6262,4607,14138,2486,10390,4003,3629],[3069,4791,4451,1640,5120,4019,5466,2241,1055,4762,6006,4197,1901,1632,4045,849,4750,1249,1302],[4005,6335,7128,2753,7530,6716,6354,2833,1957,6465,7262,6845,3281,2878,6324,1259,6468,2529,2229],[2960,5124,4774,1927,5483,5250,5203,2078,1616,4788,4782,5133,2150,1535,5001,1296,4341,2278,2067],[9350,18241,12356,7882,16288,14761,13125,6921,4209,12692,12111,15803,6179,4687,12436,2469,10082,4708,3567],[3626,6440,5480,2444,9045,6325,6246,2671,1738,4322,6462,4273,2043,1538,3580,785,3622,1772,1894],[4631,11510,10421,5368,13402,12054,10068,6019,3722,10699,10436,10440,5141,3454,9441,1679,8144,4181,3725],[3796,5933,5043,2771,7324,7343,7803,3855,2069,5730,8961,7685,3656,2883,7448,1190,7507,3038,2661],[3639,4592,4638,2340,5760,5393,7419,2528,2081,4914,4830,5059,2648,1660,4162,944,5718,2332,2246],[3379,4659,4038,2015,5616,5443,6482,2477,1610,4882,4659,5290,2143,1533,4239,715,4536,1560,1654],[4789,7911,6731,3331,7920,9230,8942,4068,2774,6867,6964,9449,3816,2936,7910,1332,7953,3839,2981],[2854,5240,5396,2656,6731,6225,6690,2966,1700,5444,6767,6649,2663,1880,4168,920,6135,3470,2793],[3948,5793,5420,3073,5779,7029,6916,2987,2469,7419,6346,7069,4217,2525,7476,1211,5847,2870,2293],[5476,9425,7283,5304,9134,10291,9362,4335,2904,6588,6719,8835,3675,2655,6359,1326,5889,3184,2402],[5033,7876,6184,4951,7343,8571,7590,4172,2581,6513,6414,6949,3559,2296,4235,741,3863,2139,1738],[3237,3738,4717,2294,5295,5816,6156,2606,1784,4839,5261,4474,1772,1576,3670,771,3527,1876,1772],[3521,5025,3302,2433,4741,5385,5920,2446,1772,3685,5201,4831,2576,1382,4324,959,4799,2581,2345],[2748,3854,3873,1753,4818,5564,5342,1854,1002,4108,3607,3716,2272,1258,4268,679,4043,1694,2068],[3239,6714,5363,3020,6121,9678,8582,3190,2535,7254,7509,9557,4220,2698,6249,1170,7199,4211,3348],[2745,4975,3758,2761,5654,4918,5258,2488,1865,4375,3893,4961,2307,1851,4616,873,5261,2579,2386],[5013,9236,7749,5021,10384,8268,9555,4777,1951,4531,6751,7951,3437,2467,8800,1686,7921,4847,3874],[4508,4136,3329,2589,4087,4750,5831,1712,1614,3440,3437,4394,2131,1152,3361,603,2811,1625,1441],[4902,5688,4389,2674,4767,5085,5482,2266,1589,3687,4607,4694,1703,1281,3401,836,3318,2049,1614],[7404,6305,5185,3628,7180,9273,9622,4217,3026,8314,6966,10648,4039,3098,7065,1530,5685,4210,3582]];
+const NS=SN.length,NM=M.length,PPU=4400;
+const TS=D.map(r=>r.reduce((a,b)=>a+b,0));const TR=TS.map(t=>t*PPU);
 const NORM=D.map(r=>r.map((v,s)=>{const m=M.reduce((a,_,j)=>a+D[j][s],0)/NM;return(v/m)*100;}));
 function mkR(d){const R=M.map(()=>[]);for(let s=0;s<NS;s++){const a=M.map((_,i)=>({i,v:d[i][s]})).sort((a,b)=>b.v-a.v);a.forEach((x,r)=>R[x.i][s]=r+1);}return R;}
 const RK=mkR(D),NRK=mkR(NORM);const tsS=M.map((_,i)=>({i,t:TS[i]})).sort((a,b)=>b.t-a.t);
@@ -200,21 +145,17 @@ const fmt=n=>n.toLocaleString('ko-KR');const fW=n=>n>=1e8?(n/1e8).toFixed(1)+'�
 const cc=h=>{const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return(r*.299+g*.587+b*.114)>160?'#1a1a1d':'#fff';};
 const rgba=(h,a)=>`rgba(${parseInt(h.slice(1,3),16)},${parseInt(h.slice(3,5),16)},${parseInt(h.slice(5,7),16)},${a})`;
 function gini(v){const s=[...v].sort((a,b)=>a-b),n=s.length,m=s.reduce((a,b)=>a+b,0)/n;let d=0;for(let i=0;i<n;i++)for(let j=0;j<n;j++)d+=Math.abs(s[i]-s[j]);return d/(2*n*n*m);}
-function cvF(v){const m=v.reduce((a,b)=>a+b,0)/v.length;return Math.sqrt(v.reduce((s,x)=>s+(x-m)**2,0)/v.length)/m;}
-function linReg(ys){const n=ys.length,xs=[...Array(n).keys()],mx=xs.reduce((a,b)=>a+b,0)/n,my=ys.reduce((a,b)=>a+b,0)/n;const num=xs.reduce((s,x,j)=>s+(x-mx)*(ys[j]-my),0),den=xs.reduce((s,x)=>s+(x-mx)**2,0);const slope=den?num/den:0,ic=my-slope*mx;const ssTot=ys.reduce((s,y)=>s+(y-my)**2,0),ssRes=ys.reduce((s,y,j)=>s+(y-(slope*j+ic))**2,0);return{slope,intercept:ic,r2:ssTot?1-ssRes/ssTot:0};}
+function cvF(v){const m=v.reduce((a,b)=>a+b,0)/v.length;return m?Math.sqrt(v.reduce((s,x)=>s+(x-m)**2,0)/v.length)/m:0;}
+function linReg(ys){const n=ys.length;if(n<2)return{slope:0,intercept:ys[0]||0,r2:0};const xs=[...Array(n).keys()],mx=xs.reduce((a,b)=>a+b,0)/n,my=ys.reduce((a,b)=>a+b,0)/n;const num=xs.reduce((s,x,j)=>s+(x-mx)*(ys[j]-my),0),den=xs.reduce((s,x)=>s+(x-mx)**2,0);const slope=den?num/den:0,ic=my-slope*mx;const ssTot=ys.reduce((s,y)=>s+(y-my)**2,0),ssRes=ys.reduce((s,y,j)=>s+(y-(slope*j+ic))**2,0);return{slope,intercept:ic,r2:ssTot?1-ssRes/ssTot:0};}
 const _t=()=>dark?'#9a9aa2':'#4a4a50',_g=()=>dark?'rgba(255,255,255,.04)':'rgba(0,0,0,.04)';
-
 let dark=false;
 document.getElementById('thB').onclick=()=>{dark=!dark;document.documentElement.setAttribute('data-theme',dark?'dark':'');document.getElementById('thB').textContent=dark?'☀️':'🌙';Object.values(CH).forEach(c=>{if(!c)return;const s=c.options?.scales;if(s?.x){s.x.ticks.color=_t();s.x.grid.color=_g();if(s.x.title)s.x.title.color=_t();}if(s?.y){s.y.ticks.color=_t();s.y.grid.color=_g();if(s.y.title)s.y.title.color=_t();}c.update('none');});};
-
 const nav=document.getElementById('nav'),nind=document.getElementById('nI');
 function mI(b){const nr=nav.getBoundingClientRect(),br=b.getBoundingClientRect();nind.style.left=(br.left-nr.left)+'px';nind.style.width=br.width+'px';}
 nav.onclick=e=>{const b=e.target.closest('.mtab');if(!b)return;nav.querySelectorAll('.mtab').forEach(x=>x.classList.remove('on'));b.classList.add('on');mI(b);document.querySelectorAll('.pane').forEach(x=>x.classList.remove('on'));document.getElementById('p-'+b.dataset.t).classList.add('on');setTimeout(()=>Object.values(CH).forEach(c=>c?.resize?.()),120);};
 requestAnimationFrame(()=>mI(nav.querySelector('.mtab.on')));window.addEventListener('resize',()=>mI(nav.querySelector('.mtab.on')));
-
 let gSubMode='ts';
 document.getElementById('gSub').onclick=e=>{const b=e.target.closest('.stab');if(!b)return;gSubMode=b.dataset.s;document.querySelectorAll('#gSub .stab').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.querySelectorAll('.ts-wrap').forEach(x=>x.classList.toggle('on',gSubMode==='ts'));document.querySelectorAll('.scatter-wrap').forEach(x=>x.classList.toggle('on',gSubMode==='sc'));setTimeout(()=>Object.values(CH).forEach(c=>c?.resize?.()),100);};
-
 function mkRng(tId,fId,aId,bId,lId,rId,iId,n,cb){const tr=document.getElementById(tId),fi=document.getElementById(fId),tA=document.getElementById(aId),tB=document.getElementById(bId);let vA=0,vB=n-1,dr=null;const pc=v=>v/(n-1)*100;
 function rd(){const l=Math.min(vA,vB),r=Math.max(vA,vB);tA.style.left=pc(vA)+'%';tB.style.left=pc(vB)+'%';fi.style.left=pc(l)+'%';fi.style.width=(pc(r)-pc(l))+'%';document.getElementById(lId).textContent=SN[l];document.getElementById(rId).textContent=SN[r];document.getElementById(iId).textContent=SL[l]+' — '+SL[r]+' ('+(r-l+1)+'시즌)';cb(l,r);}
 function gv(e){const rc=tr.getBoundingClientRect();return Math.max(0,Math.min(n-1,Math.round(((e.touches?e.touches[0]:e).clientX-rc.left)/rc.width*(n-1))));}
@@ -224,69 +165,96 @@ function up(){dr=null;document.removeEventListener('mousemove',mv);document.remo
 tA.addEventListener('mousedown',dn('a'));tA.addEventListener('touchstart',dn('a'),{passive:false});tB.addEventListener('mousedown',dn('b'));tB.addEventListener('touchstart',dn('b'),{passive:false});rd();}
 let cRng=[0,NS-1],gRng=[0,NS-1],showTrend=false;
 document.getElementById('trendCb').onchange=e=>{showTrend=e.target.checked;uMC();};
-
+// Season type filter
+let selST=new Set(['FCO','DCO','MCO']);
+function getAS(){const[a,b]=cRng;const r=[];for(let s=a;s<=b;s++)if(selST.has(ST[s]))r.push(s);return r;}
+function initSTP(){const w=document.getElementById('stPills');
+const all=()=>{selST=new Set(['FCO','DCO','MCO']);updSTP();onSTChange();};
+const none=()=>{selST.clear();updSTP();onSTChange();};
+[['전체 선택',all,''],['전체 해제',none,''],['FCO','fco'],['DCO','dco'],['MCO','mco']].forEach(([l,x,cls])=>{
+const b=document.createElement('button');
+if(typeof x==='function'){b.className='pill';b.textContent=l;b.onclick=x;}
+else{const t=l;b.className='pill '+x;b.textContent=l;b.onclick=()=>{selST.has(t)?selST.delete(t):selST.add(t);updSTP();onSTChange();};}
+w.appendChild(b);});}
+function updSTP(){document.querySelectorAll('#stPills .pill').forEach(b=>{
+if(b.classList.contains('fco'))b.classList.toggle('on',selST.has('FCO'));
+else if(b.classList.contains('dco'))b.classList.toggle('on',selST.has('DCO'));
+else if(b.classList.contains('mco'))b.classList.toggle('on',selST.has('MCO'));});}
+function onSTChange(){uMC();rebuildSc();}
+// Table
 let tSc=-1,tDr=1,tMd='s';
-function stm(m,el){tMd=m;el.parentElement.querySelectorAll('.pill').forEach(b=>b.classList.remove('on'));el.classList.add('on');rTbl();}
+function stm(m,el){tMd=m;el.parentElement.querySelectorAll('.stab').forEach(b=>b.classList.remove('on'));el.classList.add('on');rTbl();}
 function srt(c){if(tSc===c)tDr*=-1;else{tSc=c;tDr=1;}rTbl();}
 function rTbl(){const o=M.map((_,i)=>i);if(tSc>=0)o.sort((a,b)=>{let va,vb;if(tSc<NS){va=D[a][tSc];vb=D[b][tSc];}else if(tSc===NS){va=TS[a];vb=TS[b];}else{va=TR[a];vb=TR[b];}return(vb-va)*tDr;});
-let h='<table><thead><tr><th onclick="srt(-1)">멤버</th>';SL.forEach((s,i)=>{h+=`<th class="${i===tSc?(tDr===1?'desc':'asc'):''}" onclick="srt(${i})">${s}</th>`;});h+=`<th class="${tSc===NS?(tDr===1?'desc':'asc'):''}" onclick="srt(${NS})">총판매</th><th class="${tSc===NS+1?(tDr===1?'desc':'asc'):''}" onclick="srt(${NS+1})">총매출</th></tr></thead><tbody>`;
+let h='<table><thead><tr><th onclick="srt(-1)">멤버</th>';SL.forEach((s,i)=>{const tp=ST[i],bg=tp==='FCO'?'':tp==='MCO'?'background:rgba(212,212,216,.12);':'background:rgba(147,197,253,.08);';h+=`<th style="${bg}" class="${i===tSc?(tDr===1?'desc':'asc'):''}" onclick="srt(${i})">${s}</th>`;});h+=`<th class="${tSc===NS?(tDr===1?'desc':'asc'):''}" onclick="srt(${NS})">총판매</th><th class="${tSc===NS+1?(tDr===1?'desc':'asc'):''}" onclick="srt(${NS+1})">총매출</th></tr></thead><tbody>`;
 o.forEach(i=>{const m=M[i];h+=`<tr><td><span style="display:inline-block;width:3px;height:11px;background:${m.c};border-radius:1px;margin-right:4px;vertical-align:middle"></span><span style="color:${m.c}">${m.id} ${m.n}</span></td>`;for(let s=0;s<NS;s++){if(tMd==='r'){const r=RK[i][s];h+=`<td class="${r<=3?'r'+r:''}" style="text-align:center">${r}</td>`;}else h+=`<td>${fmt(D[i][s])}</td>`;}h+=`<td class="hi">${fmt(TS[i])}</td><td class="hi2">${fW(TR[i])}</td></tr>`;});h+='</tbody></table>';document.getElementById('tW').innerHTML=h;}
-
 const CH={};let sel=new Set(M.map((_,i)=>i)),cMode='sales';
-const MDESC={sales:'각 시즌의 원본 판매 수량을 그대로 표시합니다. 절대적인 판매 규모를 비교하기에 적합합니다.',rank:'24명 중 해당 시즌의 순위입니다. Y축이 역전되어 1위가 상단에 위치합니다.',normalized:'각 시즌의 전체 평균을 100으로 환산합니다. 시즌마다 상이한 전체 판매 규모를 통제하므로, 특정 시즌에서 상대적으로 두드러지는 멤버를 확인할 수 있습니다.',indexed:'선택 구간의 첫 시즌 판매량을 100으로 놓고, 이후 시즌을 비율로 표시합니다. 개인별 성장률 또는 하락률을 비교하기에 적합합니다.',zScore:'각 시즌 내에서 평균=0, 표준편차=1로 표준화한 값입니다. 양수이면 해당 시즌의 평균을 초과, 음수이면 미달을 의미합니다.',normZScore:'시즌 정규화(평균=100) 적용 후 다시 Z-Score를 산출합니다. 시즌 간 전체 판매 규모 차이를 이중으로 통제하여 순수한 상대적 위치만 비교합니다.',share:'각 시즌의 전체 판매량 대비 해당 멤버의 비율(%)입니다. 24명이 완전히 균등하면 약 4.17%가 됩니다.',deviation:'각 시즌의 24명 평균 대비 편차를 백분율로 표시합니다. 양수이면 평균 초과, 음수이면 미달이며, 시즌별 전체 규모가 자동으로 통제됩니다.',cumulative:'시간에 따른 누적 판매량입니다. 기울기가 가파를수록 해당 구간에서 빠르게 판매가 이루어진 것입니다.',momentum:'최근 3시즌 이동평균과 직전 3시즌 이동평균의 변화율(%)입니다. 양수이면 상승 추세, 음수이면 하락 추세를 의미합니다.',rankChange:'직전 시즌 대비 등수 변화량입니다. 양수(↑)이면 등수 상승, 음수(↓)이면 하락을 의미합니다.'};
+const MDESC={sales:'각 시즌의 원본 판매 수량을 그대로 표시합니다.',rank:'24명 중 해당 시즌의 순위입니다. Y축이 역전되어 1위가 상단에 위치합니다.',normalized:'각 시즌 전체 평균=100 환산. 시즌별 전체 규모 차이를 통제합니다.',indexed:'선택 구간의 첫 시즌=100 기준 비율. 개인별 성장/하락률 비교에 적합합니다.',zScore:'각 시즌 내 평균=0, 표준편차=1 표준화. 양수=평균 초과, 음수=미달.',normZScore:'시즌 정규화 후 Z-Score. 규모 차이를 이중 통제합니다.',share:'시즌 전체 대비 비율(%). 균등 시 약 4.17%.',deviation:'시즌 평균 대비 편차(%). 양수=초과, 음수=미달.',cumulative:'시간에 따른 누적 판매량. 기울기=판매 속도.',momentum:'최근 3시즌 vs 직전 3시즌 이동평균 변화율(%).',rankChange:'직전 시즌 대비 등수 변화. 양수(↑)=상승.'};
 const MODES=[{k:'sales',l:'판매량'},{k:'rank',l:'등수'},{k:'normalized',l:'정규화'},{k:'indexed',l:'지수화'},{k:'zScore',l:'Z-Score'},{k:'normZScore',l:'정규화Z'},{k:'share',l:'점유율'},{k:'deviation',l:'편차'},{k:'cumulative',l:'누적'},{k:'momentum',l:'모멘텀'},{k:'rankChange',l:'등수변동'}];
 function initCMR(){const r=document.getElementById('cmr');MODES.forEach(m=>{const b=document.createElement('button');b.className='pill'+(m.k===cMode?' on':'');b.textContent=m.l;b.onclick=()=>{cMode=m.k;r.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));b.classList.add('on');const bn=document.getElementById('mB');bn.textContent=MDESC[m.k]||'';bn.classList.toggle('show',!!MDESC[m.k]);uMC();};r.appendChild(b);});}
 function initMCC(){const c=document.getElementById('mcc');[['전체 선택',selA],['전체 해제',selN],['상위 5명',()=>selT(5)],['상위 10명',()=>selT(10)],['하위 5명',()=>selB(5)]].forEach(([l,f])=>{const b=document.createElement('button');b.className='pill g';b.textContent=l;b.onclick=f;c.appendChild(b);});}
-function rChips(){const g=document.getElementById('chips');g.innerHTML='';M.forEach((m,i)=>{const a=sel.has(i),b=document.createElement('button');b.className='chip';b.style.borderColor=m.c;b.style.background=a?m.c:'transparent';b.style.color=a?cc(m.c):m.c;b.textContent=m.id+' '+m.n;b.onclick=()=>{sel.has(i)?sel.delete(i):sel.add(i);rChips();uMC();uSc();};g.appendChild(b);});}
-function selA(){M.forEach((_,i)=>sel.add(i));rChips();uMC();uSc();}function selN(){sel.clear();rChips();uMC();uSc();}
-function selT(n){sel.clear();tsS.slice(0,n).forEach(x=>sel.add(x.i));rChips();uMC();uSc();}
-function selB(n){sel.clear();tsS.slice(-n).forEach(x=>sel.add(x.i));rChips();uMC();uSc();}
+function rChips(){const g=document.getElementById('chips');g.innerHTML='';M.forEach((m,i)=>{const a=sel.has(i),b=document.createElement('button');b.className='chip';b.style.borderColor=m.c;b.style.background=a?m.c:'transparent';b.style.color=a?cc(m.c):m.c;b.textContent=m.n;b.onclick=()=>{sel.has(i)?sel.delete(i):sel.add(i);rChips();uMC();uScApp();};g.appendChild(b);});}
+function selA(){M.forEach((_,i)=>sel.add(i));rChips();uMC();uScApp();}function selN(){sel.clear();rChips();uMC();uScApp();}
+function selT(n){sel.clear();tsS.slice(0,n).forEach(x=>sel.add(x.i));rChips();uMC();uScApp();}
+function selB(n){sel.clear();tsS.slice(-n).forEach(x=>sel.add(x.i));rChips();uMC();uScApp();}
 
-function gCD(mode,mi){const[a,b]=cRng;switch(mode){case 'sales':return D[mi].slice(a,b+1);case 'rank':return RK[mi].slice(a,b+1);case 'normalized':return NORM[mi].slice(a,b+1);
-case 'indexed':{const bs=D[mi][a]||1;return D[mi].slice(a,b+1).map(v=>(v/bs)*100);}
-case 'zScore':return D[mi].slice(a,b+1).map((_,si)=>{const s=a+si,vs=M.map((_,j)=>D[j][s]),mn=vs.reduce((x,y)=>x+y,0)/NM,sd=Math.sqrt(vs.reduce((x,v)=>x+(v-mn)**2,0)/NM);return sd?(D[mi][s]-mn)/sd:0;});
-case 'normZScore':return NORM[mi].slice(a,b+1).map((_,si)=>{const s=a+si,vs=M.map((_,j)=>NORM[j][s]),mn=vs.reduce((x,y)=>x+y,0)/NM,sd=Math.sqrt(vs.reduce((x,v)=>x+(v-mn)**2,0)/NM);return sd?(NORM[mi][s]-mn)/sd:0;});
-case 'share':return D[mi].slice(a,b+1).map((_,si)=>{const s=a+si;return(D[mi][s]/M.reduce((x,_2,j)=>x+D[j][s],0))*100;});
-case 'deviation':return D[mi].slice(a,b+1).map((_,si)=>{const s=a+si,mn=M.reduce((x,_2,j)=>x+D[j][s],0)/NM;return((D[mi][s]-mn)/mn)*100;});
-case 'cumulative':{let c=0;return D[mi].slice(a,b+1).map(v=>(c+=v));}
-case 'momentum':{const r=[];for(let si=0;si<=b-a;si++){const s=a+si;if(s<2){r.push(null);continue;}const a3=(D[mi][s]+D[mi][s-1]+D[mi][s-2])/3,ap=s>=4?(D[mi][s-2]+D[mi][s-3]+D[mi][s-4])/3:D[mi][0];r.push(((a3-ap)/ap)*100);}return r;}
-case 'rankChange':return RK[mi].slice(a,b+1).map((_,si)=>{const s=a+si;return s===0?0:RK[mi][s-1]-RK[mi][s];});}}
+function gCD(mode,mi,as){
+if(!as||!as.length)return[];
+const vals=as.map(s=>D[mi][s]);
+switch(mode){
+case 'sales':return vals;
+case 'rank':return as.map(s=>RK[mi][s]);
+case 'normalized':return as.map(s=>NORM[mi][s]);
+case 'indexed':{const bs=D[mi][as[0]]||1;return vals.map(v=>(v/bs)*100);}
+case 'zScore':return as.map(s=>{const vs=M.map((_,j)=>D[j][s]),mn=vs.reduce((x,y)=>x+y,0)/NM,sd=Math.sqrt(vs.reduce((x,v)=>x+(v-mn)**2,0)/NM);return sd?(D[mi][s]-mn)/sd:0;});
+case 'normZScore':return as.map(s=>{const vs=M.map((_,j)=>NORM[j][s]),mn=vs.reduce((x,y)=>x+y,0)/NM,sd=Math.sqrt(vs.reduce((x,v)=>x+(v-mn)**2,0)/NM);return sd?(NORM[mi][s]-mn)/sd:0;});
+case 'share':return as.map(s=>(D[mi][s]/M.reduce((x,_2,j)=>x+D[j][s],0))*100);
+case 'deviation':return as.map(s=>{const mn=M.reduce((x,_2,j)=>x+D[j][s],0)/NM;return((D[mi][s]-mn)/mn)*100;});
+case 'cumulative':{let c=0;return vals.map(v=>(c+=v));}
+case 'momentum':{return vals.map((_,idx)=>{if(idx<2)return null;const a3=(vals[idx]+vals[idx-1]+vals[idx-2])/3;const ap=idx>=4?(vals[idx-2]+vals[idx-3]+vals[idx-4])/3:vals[0];return((a3-ap)/ap)*100;});}
+case 'rankChange':{const rks=as.map(s=>RK[mi][s]);return rks.map((r,idx)=>idx===0?0:rks[idx-1]-r);}
+}return vals;}
 
 function gYC(m){const t=_t(),g=_g(),b={ticks:{color:t,font:{size:9}},grid:{color:g},grace:'8%'};
 switch(m){case 'rank':return{ticks:{color:t,font:{size:9},stepSize:1},grid:{color:g},reverse:true,min:1,max:NM,title:{display:true,text:'등수 (1위 ~ 24위)',color:t}};case 'normalized':return{...b,title:{display:true,text:'정규화 (평균=100)',color:t}};case 'indexed':return{...b,title:{display:true,text:'지수 (시작=100)',color:t}};case 'zScore':case 'normZScore':return{...b,title:{display:true,text:'Z-Score (σ)',color:t}};case 'share':return{...b,title:{display:true,text:'점유율 (%)',color:t}};case 'deviation':return{...b,title:{display:true,text:'편차 (%)',color:t}};case 'cumulative':return{...b,ticks:{...b.ticks,callback:v=>fW(v)},title:{display:true,text:'누적',color:t}};case 'momentum':return{...b,title:{display:true,text:'모멘텀 (%)',color:t}};case 'rankChange':return{...b,title:{display:true,text:'등수 변동',color:t}};default:return{...b,ticks:{...b.ticks,callback:v=>fW(v)},title:{display:true,text:'판매량',color:t}};}}
 function gTL(m){return ctx=>{const v=ctx.raw;if(v==null)return'';const l=ctx.dataset.label;if(l?.includes('추세선'))return null;switch(m){case 'rank':return l+': '+v+'위';case 'normalized':case 'indexed':return l+': '+v.toFixed(1);case 'zScore':case 'normZScore':return l+': '+(v>=0?'+':'')+v.toFixed(2)+'σ';case 'share':return l+': '+v.toFixed(2)+'%';case 'deviation':return l+': '+(v>=0?'+':'')+v.toFixed(1)+'%';case 'cumulative':return l+': '+fmt(Math.round(v));case 'momentum':return l+': '+(v>=0?'+':'')+v.toFixed(1)+'%';case 'rankChange':return l+': '+(v>0?'↑'+v:v<0?'↓'+Math.abs(v):'—');default:return l+': '+fmt(v);};};}
-
 function initMC(){CH.main=new Chart(document.getElementById('mainC').getContext('2d'),{type:'line',data:{labels:[],datasets:[]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{filter:i=>!i.dataset.label?.includes('추세선'),backgroundColor:dark?'rgba(22,22,24,.95)':'rgba(255,255,255,.96)',titleColor:dark?'#e8e8ed':'#1a1a1d',bodyColor:dark?'#e8e8ed':'#1a1a1d',borderColor:dark?'rgba(42,42,46,.8)':'rgba(226,226,231,.8)',borderWidth:1,padding:10,bodyFont:{size:10},callbacks:{label:gTL('sales')}}},scales:{x:{ticks:{color:_t(),font:{size:8},maxRotation:50},grid:{color:_g()}},y:gYC('sales')}}});uMC();}
-
-function uMC(){const c=CH.main;if(!c)return;const[a,b]=cRng,labels=SN.slice(a,b+1),ds=[],n=sel.size;
+function uMC(){const c=CH.main;if(!c)return;const as=getAS(),labels=as.map(s=>SN[s]),ds=[],n=sel.size;
 const lw=n<=3?2.5:n<=6?1.6:n<=12?.9:.55,pr=n<=3?4:n<=6?2.5:n<=12?1.5:0;
 const needZ=['zScore','normZScore','deviation','momentum','rankChange'].includes(cMode);
-if(needZ)ds.push({label:'기준선 (0)',data:Array(b-a+1).fill(0),borderColor:dark?'rgba(160,160,180,.15)':'rgba(80,80,100,.1)',borderWidth:1.5,borderDash:[6,4],pointRadius:0,fill:false,order:999});
-M.forEach((m,i)=>{if(!sel.has(i))return;const data=gCD(cMode,i);
+if(needZ)ds.push({label:'기준선 (0)',data:Array(as.length).fill(0),borderColor:dark?'rgba(160,160,180,.15)':'rgba(80,80,100,.1)',borderWidth:1.5,borderDash:[6,4],pointRadius:0,fill:false,order:999});
+M.forEach((m,i)=>{if(!sel.has(i))return;const data=gCD(cMode,i,as);
 ds.push({label:`${m.id} ${m.n}`,data,borderColor:rgba(m.c,n<=12?.8:.4),backgroundColor:rgba(m.c,.01),borderWidth:lw,pointRadius:pr,pointBackgroundColor:m.c,pointHoverRadius:5,tension:.3,fill:false,spanGaps:true});
 if(showTrend&&data.length>=3){const valid=data.filter(v=>v!=null);if(valid.length>=3){const reg=linReg(valid);ds.push({label:`${m.n} 추세선`,data:data.map((_,j)=>reg.slope*j+reg.intercept),borderColor:rgba(m.c,.25),borderWidth:1.2,borderDash:[4,3],pointRadius:0,fill:false,tension:0,order:998});}}});
 const info=document.getElementById('trendInfo');
-if(showTrend&&sel.size===1){const i=[...sel][0],data=gCD(cMode,i);if(data.length>=3){const valid=data.filter(v=>v!=null),reg=linReg(valid);info.textContent=`R² = ${reg.r2.toFixed(3)} · 기울기 = ${reg.slope>=0?'+':''}${reg.slope.toFixed(1)}`;}}else info.textContent='';
+if(showTrend&&sel.size===1){const i=[...sel][0],data=gCD(cMode,i,as);if(data.length>=3){const valid=data.filter(v=>v!=null),reg=linReg(valid);info.textContent=`R²=${reg.r2.toFixed(3)} 기울기=${reg.slope>=0?'+':''}${reg.slope.toFixed(1)}`;}}else info.textContent='';
 c.data.labels=labels;c.data.datasets=ds;c.options.scales.y=gYC(cMode);c.options.plugins.tooltip.callbacks.label=gTL(cMode);c.update();}
 Chart.register({id:'hl',beforeDraw(ch){const a=ch.getActiveElements();if(!a.length)return;const ai=a[0].datasetIndex;ch.data.datasets.forEach((ds,i)=>{if(!ds._ow)ds._ow=ds.borderWidth;if(ds.label?.includes('기준')||ds.label?.includes('균등')||ds.label?.includes('추세선'))return;ds.borderWidth=i===ai?Math.max(2.5,ds._ow):Math.max(.3,ds._ow*.3);});}});
 
 // Scatters
+function scAS(){const r=[];for(let s=0;s<NS;s++)if(selST.has(ST[s]))r.push(s);return r;}
 function mkSC(id,allData,xL,yL,tipFn,extras,opts){const ds=[...(extras||[]),{data:allData,backgroundColor:M.map((m,i)=>sel.has(i)?rgba(m.c,.55):rgba(m.c,.08)),borderColor:M.map((m,i)=>sel.has(i)?m.c:rgba(m.c,.12)),borderWidth:1.5,pointRadius:M.map((_,i)=>sel.has(i)?6:2.5),pointHoverRadius:9}];
 const ch=new Chart(document.getElementById(id).getContext('2d'),{type:'scatter',data:{datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{filter:i=>sel.has(i.dataIndex),callbacks:{title:()=>'',label:tipFn}}},scales:{x:{ticks:{color:_t(),font:{size:9}},grid:{color:_g()},title:{display:true,text:xL,color:_t(),font:{size:10}},...(opts?.x||{})},y:{ticks:{color:_t(),font:{size:9}},grid:{color:_g()},title:{display:true,text:yL,color:_t(),font:{size:10}},grace:'6%',...(opts?.y||{})}}}});
 const orig=ch.draw.bind(ch);ch.draw=function(){orig();const meta=ch.getDatasetMeta(ds.length-1),ctx=ch.ctx;ctx.save();ctx.textAlign='center';ctx.textBaseline='bottom';meta.data.forEach((pt,i)=>{if(!sel.has(i))return;ctx.font='600 8px Pretendard';ctx.fillStyle=dark?rgba(M[i].c,.85):M[i].c;ctx.fillText(M[i].n,pt.x,pt.y-8);});ctx.restore();};return ch;}
-function buildSc(){
-CH.s1=mkSC('s1C',M.map((_,i)=>({x:TS[i]/NS,y:cvF(D[i])*100})),'평균 판매량 →','CV (%) ↑',c=>{if(!c.raw?.x)return'';const i=c.dataIndex;return[M[i].id+' '+M[i].n,'평균: '+fmt(Math.round(c.raw.x))+'개','CV: '+c.raw.y.toFixed(1)+'%'];});
-const d2=M.map((_,i)=>{const reg=linReg(D[i]);return{x:ARK[i],y:reg.slope};});
-CH.s2=mkSC('s2C',d2,'← 평균 등수 (우측 = 1위)','성장 기울기 ↑',c=>{if(!c.raw?.x)return'';const i=c.dataIndex;const reg=linReg(D[i]);return[M[i].id+' '+M[i].n,'평균: '+c.raw.x.toFixed(1)+'위','기울기: '+(c.raw.y>=0?'+':'')+c.raw.y.toFixed(0),'R²: '+reg.r2.toFixed(3)];},[{type:'line',data:[{x:1,y:0},{x:NM,y:0}],borderColor:'rgba(128,128,160,.1)',borderWidth:1,borderDash:[4,3],pointRadius:0}],{x:{reverse:true,min:1,max:NM}});
-const d3=M.map((_,i)=>{const e=D[i].slice(0,6).reduce((a,b)=>a+b,0)/6,l=D[i].slice(-6).reduce((a,b)=>a+b,0)/6;return{x:e,y:l};});const av=d3.flatMap(p=>[p.x,p.y]),mn=Math.min(...av),mx=Math.max(...av);
-CH.s3=mkSC('s3C',d3,'초기 6시즌 평균 →','최근 6시즌 평균 ↑',c=>{if(!c.raw?.x)return'';const i=c.dataIndex;return[M[i].id+' '+M[i].n,'초기: '+fmt(Math.round(c.raw.x)),'최근: '+fmt(Math.round(c.raw.y)),'변화: '+((c.raw.y-c.raw.x)/c.raw.x*100).toFixed(1)+'%'];},[{type:'line',data:[{x:mn,y:mn},{x:mx,y:mx}],borderColor:'rgba(128,128,160,.1)',borderWidth:1,borderDash:[4,3],pointRadius:0}]);
-const d4=M.map((_,i)=>{const r=NRK[i],avg=r.reduce((a,b)=>a+b,0)/NS,std=Math.sqrt(r.reduce((s,v)=>s+(v-avg)**2,0)/NS);return{x:avg,y:std};});
+function buildSc(){const as=scAS(),n=as.length;if(n<1)return;
+const avgS=M.map((_,i)=>{const v=as.map(s=>D[i][s]);return v.reduce((a,b)=>a+b,0)/n;});
+CH.s1=mkSC('s1C',M.map((_,i)=>({x:avgS[i],y:cvF(as.map(s=>D[i][s]))*100})),'평균 판매량 →','CV (%) ↑',c=>{if(!c.raw?.x)return'';const i=c.dataIndex;return[M[i].id+' '+M[i].n,'평균: '+fmt(Math.round(c.raw.x)),'CV: '+c.raw.y.toFixed(1)+'%'];});
+const rkAS=as.map(s=>{const a=M.map((_,i)=>({i,v:D[i][s]})).sort((a,b)=>b.v-a.v);const r=[];a.forEach((x,ri)=>r[x.i]=ri+1);return r;});
+const avgRk=M.map((_,i)=>rkAS.reduce((a,r)=>a+r[i],0)/n);
+const d2=M.map((_,i)=>{const reg=linReg(as.map(s=>D[i][s]));return{x:avgRk[i],y:reg.slope};});
+CH.s2=mkSC('s2C',d2,'← 평균 등수 (우측 = 1위)','성장 기울기 ↑',c=>{if(!c.raw?.x)return'';const i=c.dataIndex;const reg=linReg(as.map(s=>D[i][s]));return[M[i].id+' '+M[i].n,'평균: '+c.raw.x.toFixed(1)+'위','기울기: '+(c.raw.y>=0?'+':'')+c.raw.y.toFixed(0),'R²: '+reg.r2.toFixed(3)];},[{type:'line',data:[{x:1,y:0},{x:NM,y:0}],borderColor:'rgba(128,128,160,.1)',borderWidth:1,borderDash:[4,3],pointRadius:0}],{x:{reverse:true,min:1,max:NM}});
+const half=Math.floor(n/2)||1;const d3=M.map((_,i)=>{const ea=as.slice(0,half).map(s=>D[i][s]),la=as.slice(-half).map(s=>D[i][s]);return{x:ea.reduce((a,b)=>a+b,0)/ea.length,y:la.reduce((a,b)=>a+b,0)/la.length};});
+const av=d3.flatMap(p=>[p.x,p.y]),mn=Math.min(...av),mx=Math.max(...av);
+CH.s3=mkSC('s3C',d3,'초반 평균 →','후반 평균 ↑',c=>{if(!c.raw?.x)return'';const i=c.dataIndex;return[M[i].id+' '+M[i].n,'초반: '+fmt(Math.round(c.raw.x)),'후반: '+fmt(Math.round(c.raw.y)),'변화: '+((c.raw.y-c.raw.x)/c.raw.x*100).toFixed(1)+'%'];},[{type:'line',data:[{x:mn,y:mn},{x:mx,y:mx}],borderColor:'rgba(128,128,160,.1)',borderWidth:1,borderDash:[4,3],pointRadius:0}]);
+const nrkAS=as.map(s=>{const a=M.map((_,i)=>({i,v:NORM[i][s]})).sort((a,b)=>b.v-a.v);const r=[];a.forEach((x,ri)=>r[x.i]=ri+1);return r;});
+const d4=M.map((_,i)=>{const r=nrkAS.map(rk=>rk[i]),avg=r.reduce((a,b)=>a+b,0)/n,std=Math.sqrt(r.reduce((s,v)=>s+(v-avg)**2,0)/n);return{x:avg,y:std};});
 CH.s4=mkSC('s4C',d4,'← 정규화 등수 (우측 = 1위)','등수 SD ↑',c=>{if(!c.raw?.x)return'';const i=c.dataIndex;return[M[i].id+' '+M[i].n,'정규화 등수: '+c.raw.x.toFixed(1)+'위','SD: '+c.raw.y.toFixed(1)];},null,{x:{reverse:true,min:1,max:NM}});}
-function uSc(){['s1','s2','s3','s4'].forEach(k=>{const c=CH[k];if(!c)return;const ds=c.data.datasets[c.data.datasets.length-1];ds.backgroundColor=M.map((m,i)=>sel.has(i)?rgba(m.c,.55):rgba(m.c,.06));ds.borderColor=M.map((m,i)=>sel.has(i)?m.c:rgba(m.c,.08));ds.pointRadius=M.map((_,i)=>sel.has(i)?6:2);c.update();});}
+function rebuildSc(){['s1','s2','s3','s4'].forEach(k=>{if(CH[k]){CH[k].destroy();delete CH[k];}});buildSc();}
+function uScApp(){['s1','s2','s3','s4'].forEach(k=>{const c=CH[k];if(!c)return;const ds=c.data.datasets[c.data.datasets.length-1];ds.backgroundColor=M.map((m,i)=>sel.has(i)?rgba(m.c,.55):rgba(m.c,.06));ds.borderColor=M.map((m,i)=>sel.has(i)?m.c:rgba(m.c,.08));ds.pointRadius=M.map((_,i)=>sel.has(i)?6:2);c.update();});}
 
 // Analytics
-function rStats(){const gt=TS.reduce((a,b)=>a+b,0),mn=gt/NM,sorted=[...TS].sort((a,b)=>a-b),med=(sorted[11]+sorted[12])/2,std=Math.sqrt(TS.reduce((s,v)=>s+(v-mn)**2,0)/NM),mx=tsS[0],mi=tsS[NM-1],g=gini(TS),c=cvF(TS),skew=(()=>{const m3=TS.reduce((s,v)=>s+(v-mn)**3,0)/NM;return m3/(std**3);})();
-document.getElementById('stG').innerHTML=[{l:'총 판매량',v:fmt(gt),s:'전체 매출 '+fW(TR.reduce((a,b)=>a+b,0))},{l:'멤버 평균',v:fmt(Math.round(mn)),s:'중앙값 '+fmt(Math.round(med))},{l:'표준편차',v:fmt(Math.round(std)),s:'평균 대비 '+(std/mn*100).toFixed(1)+'%'},{l:'최다 판매',v:M[mx.i].n,s:fmt(mx.t)+'개',cl:M[mx.i].c},{l:'최소 판매',v:M[mi.i].n,s:fmt(mi.t)+'개',cl:M[mi.i].c},{l:'최대/최소',v:(mx.t/mi.t).toFixed(2)+'×',s:'상하위 격차'},{l:'지니계수',v:g.toFixed(4),s:g<.15?'매우 균등':g<.25?'비교적 균등':g<.35?'다소 불균등':'상당히 불균등'},{l:'변동계수',v:(c*100).toFixed(1)+'%',s:'낮을수록 균등'},{l:'왜도',v:skew.toFixed(2),s:skew>0?'우측 편향 (상위 집중)':'좌측 편향'}].map(x=>`<div class="sc"><div class="lb">${x.l}</div><div class="vl" style="${x.cl?'color:'+x.cl:''}">${x.v}</div><div class="nt">${x.s}</div></div>`).join('');}
+function rStats(){const gt=TS.reduce((a,b)=>a+b,0),mn=gt/NM,sorted=[...TS].sort((a,b)=>a-b),med=(sorted[11]+sorted[12])/2,std=Math.sqrt(TS.reduce((s,v)=>s+(v-mn)**2,0)/NM),mx=tsS[0],mi=tsS[NM-1],g=gini(TS),c=cvF(TS);
+document.getElementById('stG').innerHTML=[{l:'총 판매량',v:fmt(gt),s:'전체 매출 '+fW(TR.reduce((a,b)=>a+b,0))},{l:'멤버 평균',v:fmt(Math.round(mn)),s:'중앙값 '+fmt(Math.round(med))},{l:'표준편차',v:fmt(Math.round(std)),s:'평균 대비 '+(std/mn*100).toFixed(1)+'%'},{l:'최다 판매',v:M[mx.i].n,s:fmt(mx.t)+'개',cl:M[mx.i].c},{l:'최소 판매',v:M[mi.i].n,s:fmt(mi.t)+'개',cl:M[mi.i].c},{l:'최대/최소',v:(mx.t/mi.t).toFixed(2)+'×',s:'상하위 격차'},{l:'지니계수',v:g.toFixed(4),s:g<.15?'매우 균등':g<.25?'비교적 균등':g<.35?'다소 불균등':'상당히 불균등'},{l:'변동계수',v:(c*100).toFixed(1)+'%',s:'낮을수록 균등'}].map(x=>`<div class="sc"><div class="lb">${x.l}</div><div class="vl" style="${x.cl?'color:'+x.cl:''}">${x.v}</div><div class="nt">${x.s}</div></div>`).join('');}
 function rLorenz(){const sorted=[...TS].sort((a,b)=>a-b),tot=sorted.reduce((a,b)=>a+b,0);const lx=[0],ly=[0];let cum=0;sorted.forEach((v,i)=>{cum+=v;lx.push((i+1)/NM);ly.push(cum/tot);});
 CH.lz=new Chart(document.getElementById('lzC').getContext('2d'),{type:'line',data:{labels:lx.map(v=>(v*100).toFixed(0)+'%'),datasets:[{label:'균등선',data:lx,borderColor:'rgba(128,128,160,.2)',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false},{label:'로렌츠',data:ly,borderColor:dark?'#3b82f6':'#2563eb',borderWidth:2.5,backgroundColor:rgba('#2563eb',.04),pointRadius:2,pointBackgroundColor:dark?'#3b82f6':'#2563eb',fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:_t(),font:{size:9}}}},scales:{x:{ticks:{color:_t()},grid:{color:_g()},title:{display:true,text:'멤버 누적 비율',color:_t()}},y:{ticks:{color:_t(),callback:v=>(v*100)+'%'},grid:{color:_g()},title:{display:true,text:'판매량 누적 비율',color:_t()}}}}});
 const t5=tsS.slice(0,5),b5=tsS.slice(-5),t5p=(t5.reduce((a,x)=>a+TS[x.i],0)/tot*100).toFixed(1),b5p=(b5.reduce((a,x)=>a+TS[x.i],0)/tot*100).toFixed(1);
@@ -302,14 +270,12 @@ function uConc(){if(!CH.cn)return;CH.cn.data.datasets[0].hidden=concN!==5;CH.cn.
 function rHM(){const sorted=tsS.map(x=>x.i);let h='<table class="hm"><thead><tr><th>멤버</th>';SN.forEach(s=>h+=`<th>${s}</th>`);h+='<th>평균</th></tr></thead><tbody>';sorted.forEach(mi=>{h+=`<tr><td style="color:${M[mi].c}">${M[mi].id} ${M[mi].n}</td>`;for(let s=0;s<NS;s++){const r=RK[mi][s],t=1-(r-1)/(NM-1),rd=Math.round(220-t*170),gn=Math.round(85+t*135),bl=Math.round(85+t*50);h+=`<td style="background:rgba(${rd},${gn},${bl},.14);color:rgb(${Math.round(rd*.5)},${Math.round(gn*.5)},${Math.round(bl*.5)})">${r}</td>`;}h+=`<td style="font-weight:700;color:var(--ac)">${ARK[mi].toFixed(1)}</td></tr>`;});h+='</tbody></table>';document.getElementById('hmW').innerHTML=h;}
 function rBox(){const sorted=tsS.map(x=>x.i),labels=sorted.map(i=>M[i].id+' '+M[i].n),mins=[],q1s=[],meds=[],q3s=[],maxs=[];sorted.forEach(i=>{const r=[...RK[i]].sort((a,b)=>a-b),n=r.length;mins.push(r[0]);maxs.push(r[n-1]);meds.push((r[Math.floor(n/2)]+r[Math.ceil(n/2)-1])/2);q1s.push(r[Math.floor(n/4)]);q3s.push(r[Math.floor(3*n/4)]);});
 CH.bx=new Chart(document.getElementById('bxC').getContext('2d'),{type:'bar',data:{labels,datasets:[{label:'최고~Q1',data:sorted.map((_,i)=>[mins[i],q1s[i]]),backgroundColor:rgba('#16a34a',.12),borderColor:'#16a34a',borderWidth:1,borderSkipped:false,borderRadius:1},{label:'Q1~중앙값',data:sorted.map((_,i)=>[q1s[i],meds[i]]),backgroundColor:rgba('#2563eb',.18),borderColor:'#2563eb',borderWidth:1,borderSkipped:false},{label:'중앙값~Q3',data:sorted.map((_,i)=>[meds[i],q3s[i]]),backgroundColor:rgba('#2563eb',.08),borderColor:'#2563eb',borderWidth:1,borderSkipped:false},{label:'Q3~최저',data:sorted.map((_,i)=>[q3s[i],maxs[i]]),backgroundColor:rgba('#dc2626',.12),borderColor:'#dc2626',borderWidth:1,borderSkipped:false,borderRadius:1}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:_t(),font:{size:8}}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.raw[0]}~${c.raw[1]}위`}}},scales:{x:{min:1,max:NM,ticks:{color:_t(),stepSize:1},grid:{color:_g()},title:{display:true,text:'등수 (1위 ~ 24위)',color:_t()}},y:{ticks:{color:_t(),font:{size:8}},grid:{display:false}}}}});}
-
 function rTB(){CH.tb=new Chart(document.getElementById('tbC').getContext('2d'),{type:'bar',data:{labels:tsS.map(x=>M[x.i].id+' '+M[x.i].n),datasets:[{data:tsS.map(x=>TS[x.i]),backgroundColor:tsS.map(x=>rgba(M[x.i].c,.5)),borderColor:tsS.map(x=>M[x.i].c),borderWidth:1.5,borderRadius:2}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.raw)+'개'}}},scales:{x:{ticks:{color:_t(),callback:v=>fW(v)},grid:{color:_g()}},y:{ticks:{color:_t(),font:{size:9}},grid:{display:false}}}}});}
 function rAR(){const s=[...M.map((_,i)=>({i,v:ARK[i]}))].sort((a,b)=>a.v-b.v);CH.ar=new Chart(document.getElementById('arC').getContext('2d'),{type:'bar',data:{labels:s.map(x=>M[x.i].id+' '+M[x.i].n),datasets:[{data:s.map(x=>x.v),backgroundColor:s.map(x=>rgba(M[x.i].c,.5)),borderColor:s.map(x=>M[x.i].c),borderWidth:1.5,borderRadius:2}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'평균 '+c.raw.toFixed(1)+'위'}}},scales:{x:{ticks:{color:_t()},grid:{color:_g()}},y:{ticks:{color:_t(),font:{size:9}},grid:{display:false}}}}});}
 function rPod(){const counts=M.map((_,i)=>{let g=0,s=0,b=0;RK[i].forEach(r=>{if(r===1)g++;else if(r===2)s++;else if(r===3)b++;});return{i,g,s,b,pt:g*3+s*2+b};}).sort((a,b)=>b.pt-a.pt||b.g-a.g);document.getElementById('podG').innerHTML=counts.filter(x=>x.g+x.s+x.b>0).map(x=>{const m=M[x.i];return`<div class="pod"><div class="pod-ic" style="background:${rgba(m.c,.1)};color:${m.c}">${m.id}</div><div><div class="pod-nm" style="color:${m.c}">${m.n} <span style="font-size:.52rem;color:var(--tx3)">${x.pt}pt</span></div><div class="pod-bd">${x.g?`<span class="pod-b" style="background:#fef3c7;color:#92400e">🥇 ${x.g}회</span>`:''}${x.s?`<span class="pod-b" style="background:#f1f5f9;color:#475569">🥈 ${x.s}회</span>`:''}${x.b?`<span class="pod-b" style="background:#fef2f2;color:#991b1b">🥉 ${x.b}회</span>`:''}</div></div></div>`;}).join('');}
 function rNR(){const nt=M.map((_,i)=>({i,v:NORM[i].reduce((a,b)=>a+b,0)})).sort((a,b)=>b.v-a.v);CH.nr=new Chart(document.getElementById('nrC').getContext('2d'),{type:'bar',data:{labels:nt.map(x=>M[x.i].id+' '+M[x.i].n),datasets:[{data:nt.map(x=>x.v),backgroundColor:nt.map(x=>rgba(M[x.i].c,.5)),borderColor:nt.map(x=>M[x.i].c),borderWidth:1.5,borderRadius:2}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'정규화 합계: '+c.raw.toFixed(1)}}},scales:{x:{ticks:{color:_t()},grid:{color:_g()}},y:{ticks:{color:_t(),font:{size:9}},grid:{display:false}}}}});}
-
 document.addEventListener('DOMContentLoaded',()=>{
-rTbl();initCMR();initMCC();rChips();
+rTbl();initCMR();initMCC();rChips();initSTP();updSTP();
 mkRng('rT','rF','rA','rB','rL','rR','rI',NS,(l,r)=>{cRng=[l,r];uMC();});
 mkRng('gT','gF','gA','gB','gL','gR','gI',NS,(l,r)=>{gRng=[l,r];rGini();});
 document.getElementById('mB').textContent=MDESC.sales;document.getElementById('mB').classList.add('show');
